@@ -39,12 +39,31 @@ const SearchInput = () => {
   );
 };
 
+const ResultSort = () => {
+  return (
+    <div className="result-general">
+      <p className="result-title">Result: 100 repositories</p>
+      <div className="result-sort">
+        <select className="sort-select">
+          <option value="" disabled selected>
+            Sort by
+          </option>
+          <option value="alphabet">alphabet</option>
+          <option value="star">star</option>
+          <option value="fork">fork</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
 const SearchPage = () => {
   return (
     <div>
       <Header />
       <div className="general-outside">
         <SearchInput />
+        <ResultSort />
       </div>
     </div>
   );
