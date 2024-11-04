@@ -1,26 +1,29 @@
 @font-face {
-  font-family: 'NotoSans';
-  src: url('./assets/fonts/NotoSans-VariableFont_wdth,wght.ttf') format('ttf');
+  font-family: "NotoSans";
+  src: url("./assets/fonts/NotoSans-VariableFont_wdth,wght.ttf")
+    format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'GTAmerica';
-  src: url('./assets/fonts/GT-America-Standard-Regular-Trial.otf') format('opentype');
+  font-family: "GTAmerica";
+  src: url("./assets/fonts/GT-America-Standard-Regular-Trial.otf")
+    format("opentype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'GTAmerica';
-  src: url('./assets/fonts/GT-America-Standard-Bold-Trial.otf') format('opentype');
+  font-family: "GTAmerica";
+  src: url("./assets/fonts/GT-America-Standard-Bold-Trial.otf")
+    format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 :root {
-  font-family: 'NotoSans', sans-serif;
+  font-family: "NotoSans", sans-serif;
 
   background: #f5f5f5;
 
