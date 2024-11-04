@@ -13,4 +13,64 @@
   border-radius: 20px;
 
   text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.tags {
+  display: flex;
+  gap: 12px;
+}
+
+.tag {
+  height: 24px;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  font-size: 9px;
+  box-sizing: border-box;
+  gap: 5px;
+}
+
+.icon {
+  height: 16px;
+  width: 16px;
+}
+
+.name-content {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.author {
+  font-size: 16px;
+  margin: 0;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #1e89f0;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }

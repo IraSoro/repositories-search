@@ -29,8 +29,34 @@ interface ItemProps {
 const Item = (props: ItemProps) => {
   return (
     <div className="card">
-      <h2>{props.item.name}</h2>
-      <p>{props.item.description}</p>
+      <div className="card-header">
+        <img
+          src={props.item.owner.avatar_url}
+          alt="Avatar"
+          className="avatar"
+        />
+        <div className="tags">
+          <span className="tag">
+            <img src="icons/star 1.svg" alt="Stars" className="icon" />
+            {props.item.stargazers_count}
+          </span>
+          <span className="tag">
+            <img src="icons/git-branch 1.svg" alt="Forks" className="icon" />
+            {props.item.forks_count}
+          </span>
+        </div>
+      </div>
+      <div className="name-content">
+        <p className="author">@{props.item.owner.login}</p>
+        <a
+          href={props.item.html_url}
+          className="link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {props.item.full_name}
+        </a>
+      </div>
     </div>
   );
 };
