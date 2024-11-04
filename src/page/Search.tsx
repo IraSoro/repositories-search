@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ItemsList from "../components/ItemsList";
 import "./Search.css";
 
 const Header = () => {
@@ -73,6 +74,7 @@ const SearchPage = () => {
       <div className="general-outside">
         <SearchInput />
         <ResultSort />
+        <ItemsList />
       </div>
     </div>
   );

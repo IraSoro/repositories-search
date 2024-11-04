@@ -1,0 +1,16 @@
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(282px, 1fr));
+  gap: 24px;
+  width: 100%;
+  justify-items: center;
+}
+
+.card {
+  width: 282px;
+  height: 180px;
+  background-color: #fff;
+  border-radius: 20px;
+
+  text-align: center;
+}
