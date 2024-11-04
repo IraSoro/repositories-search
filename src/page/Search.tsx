@@ -31,10 +31,21 @@ const Header = () => {
   );
 };
 
+const SearchInput = () => {
+  return (
+    <div className="search-outside">
+      <input type="text" className="search-input" placeholder="Search" />
+    </div>
+  );
+};
+
 const SearchPage = () => {
   return (
     <div>
       <Header />
+      <div className="general-outside">
+        <SearchInput />
+      </div>
     </div>
   );
 };
