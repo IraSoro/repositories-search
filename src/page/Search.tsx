@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./Search.css";
 
 const Header = () => {
@@ -40,12 +41,20 @@ const SearchInput = () => {
 };
 
 const ResultSort = () => {
+  const [selectedValue, setSelectedValue] = useState("none");
+
   return (
     <div className="result-general">
       <p className="result-title">Result: 100 repositories</p>
       <div className="result-sort">
-        <select className="sort-select">
-          <option value="" disabled selected>
+        <select
+          className="sort-select"
+          value={selectedValue}
+          onChange={(event) => {
+            setSelectedValue(event.target.value);
+          }}
+        >
+          <option value="none" disabled>
             Sort by
           </option>
           <option value="alphabet">alphabet</option>
