@@ -74,3 +74,40 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-more {
+  background-color: #d44333;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  margin-left: 18px;
+}
+
+.btn-icons {
+  display: flex;
+  gap: 16px;
+}
+
+.copy-icon {
+  width: 23px;
+  height: 23px;
+  border-radius: 8px;
+  border: 1px solid rgba(58, 58, 58, 0.12);
+  padding: 4px;
+}
+
+.like-icon {
+  width: 32px;
+  height: 32px;
+}

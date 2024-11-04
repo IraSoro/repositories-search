@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import TestItem from "./TestItem";
 import "./ItemsList.css";
 
@@ -27,6 +29,11 @@ interface ItemProps {
 }
 
 const Item = (props: ItemProps) => {
+  const [like, setLike] = useState(false);
+  function handleLike() {
+    setLike((prev) => !prev);
+  }
+
   return (
     <div className="card">
       <div className="card-header">
@@ -56,6 +63,27 @@ const Item = (props: ItemProps) => {
         >
           {props.item.full_name}
         </a>
+      </div>
+      <div className="buttons">
+        <div className="btn-icons">
+          {like ? (
+            <img
+              src="icons/heart_fill.svg"
+              alt="Like"
+              className="like-icon"
+              onClick={handleLike}
+            />
+          ) : (
+            <img
+              src="icons/heart_outline.svg"
+              alt="Like"
+              className="like-icon"
+              onClick={handleLike}
+            />
+          )}
+          <img src="icons/link 1.svg" alt="Copy" className="copy-icon" />
+        </div>
+        <button className="btn-more">Подробнее</button>
       </div>
     </div>
   );
