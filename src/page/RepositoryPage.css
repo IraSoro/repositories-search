@@ -32,10 +32,7 @@ p.profile {
 /* Card Title */
 .title-container {
   display: flex;
-  align-items: flex-start;
-  padding: 10px;
-  /* border: 1px solid #ddd; */
-  border-radius: 8px;
+  flex-wrap: wrap;
   gap: 24px;
 }
 
