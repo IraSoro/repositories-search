@@ -7,3 +7,27 @@
   flex-direction: column;
   margin: 0 auto;
 }
+
+.back-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  margin-top: 24px;
+  margin-left: 0;
+}
+
+.back-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 4px;
+}
+
+.back-text {
+  color: #3a3a3a;
+  font-family: "NotoSans", sans-serif;
+  font-size: 14px;
+}
