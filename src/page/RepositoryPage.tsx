@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { TestItem } from "../components/TestItem";
@@ -99,6 +100,37 @@ const ListInfo = (props: ListInfoProps) => {
   );
 };
 
+const Buttons = () => {
+  const [like, setLike] = useState(false);
+  function handleLike() {
+    setLike((prev) => !prev);
+  }
+
+  return (
+    <div className="card-buttons">
+      <div className="card-btn-icons">
+        <img src="/public/icons/link 1.svg" alt="" className="card-copy-icon" />
+        {like ? (
+          <img
+            src="/public/icons/heart_fill.svg"
+            alt=""
+            className="card-like-icon"
+            onClick={handleLike}
+          />
+        ) : (
+          <img
+            src="/public/icons/heart_outline.svg"
+            alt=""
+            className="card-like-icon"
+            onClick={handleLike}
+          />
+        )}
+      </div>
+      <button className="btn-open">Открыть репозиторий</button>
+    </div>
+  );
+};
+
 const RepositoryPage = () => {
   const { id } = useParams<string>();
   console.log("id = ", id);
@@ -115,6 +147,7 @@ const RepositoryPage = () => {
         />
         <ListInfo {...repository} />
         <div className="divider" />
+        <Buttons />
       </div>
     </div>
   );
