@@ -2,7 +2,30 @@ import { Link } from "react-router-dom";
 
 import "./Header.css";
 
-const Header = () => {
+interface FavoritesProps {
+  favorites: number;
+}
+
+const FavoritesIcon = (props: FavoritesProps) => {
+  return (
+    <Link to="/favorites">
+      <div className="icon-heart-container">
+        <img
+          src="icons/heart_simple.svg"
+          alt="Heart Icon"
+          className="icon-heart"
+        />
+        {props.favorites > 0 && <div className="badge">{props.favorites}</div>}
+      </div>
+    </Link>
+  );
+};
+
+interface HeaderProps {
+  favorites: number;
+}
+
+const Header = (props: HeaderProps) => {
   return (
     <div className="header">
       <div className="top">
@@ -17,13 +40,7 @@ const Header = () => {
           </div>
         </Link>
         <div className="right">
-          <Link to="/favorites">
-            <img
-              src="icons/heart_simple.svg"
-              alt="Heart Icon"
-              className="icon-heart"
-            />
-          </Link>
+          <FavoritesIcon favorites={props.favorites} />
           <div className="account-outside">
             <img
               src="icons/account.svg"
