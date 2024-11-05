@@ -4,7 +4,7 @@ import "./Header.css";
 
 const Title = () => {
   return (
-    <Link to="/" className="link">
+    <Link to="/" style={{ textDecoration: "none" }}>
       <div className="left">
         <img
           src="icons/search_new.svg"
