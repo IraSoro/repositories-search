@@ -21,12 +21,14 @@
   margin-top: 85px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
 p.profile {
   font-size: 28px;
   font-weight: 600;
   text-align: left;
+  margin-bottom: 0;
 }
 
 /* Card Title */
@@ -72,7 +74,6 @@ p.profile {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  margin-top: 24px;
 }
 
 .info-card {
@@ -114,4 +115,11 @@ p.profile {
   font-size: 14px;
   color: #84868C;
   margin: 0;
+}
+
+/* Divider */
+.divider{
+  height: 1px;
+  width: 100%;
+  background-color: rgba(33, 34, 35, 0.08);
 }

@@ -114,6 +114,7 @@ const RepositoryPage = () => {
           description={repository.description}
         />
         <ListInfo {...repository} />
+        <div className="divider" />
       </div>
     </div>
   );
