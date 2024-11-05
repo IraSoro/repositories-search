@@ -66,3 +66,52 @@ p.profile {
   color: #3a3a3a;
   margin: 0;
 }
+
+/* Short Info */
+.short-info-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.info-card {
+  height: 80px;
+  width: 250px;
+  background-color: rgba(58, 58, 58, 0.04);
+  border-radius: 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.info-icon{
+  height: 16px;
+  width: 16px;
+
+  padding: 8px;
+  background-color: rgba(58, 58, 58, 0.08);
+  border-radius: 50px;
+}
+
+.info-text{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.info-value {
+  font-size: 20px;
+  color: #3a3a3a;
+  margin: 0;
+}
+
+.info-description {
+  font-size: 14px;
+  color: #84868C;
+  margin: 0;
+}

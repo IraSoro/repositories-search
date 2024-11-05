@@ -17,6 +17,7 @@ interface RepoInfo {
   forks_count: number;
   forks: number;
   archived: boolean;
+  language: string;
 }
 
 export default RepoInfo;

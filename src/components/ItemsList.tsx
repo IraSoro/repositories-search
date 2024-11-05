@@ -88,7 +88,7 @@ interface ItemProps {
 
 const Item = ({ item }: ItemProps) => {
   return (
-    <Link to={`repository/${item.id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/repository/${item.id}`} style={{ textDecoration: "none" }}>
       <div className="card">
         <CardHeader
           avatar_url={item.owner.avatar_url}
