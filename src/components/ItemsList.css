@@ -94,6 +94,7 @@
   padding: 8px 16px;
   box-sizing: border-box;
   margin-left: 18px;
+  cursor: pointer;
 }
 
 .btn-icons {
@@ -107,9 +108,11 @@
   border-radius: 8px;
   border: 1px solid rgba(58, 58, 58, 0.12);
   padding: 4px;
+  cursor: pointer;
 }
 
 .like-icon {
   width: 32px;
   height: 32px;
+  cursor: pointer;
 }

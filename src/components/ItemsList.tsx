@@ -5,11 +5,27 @@ import RepoInfo from "../states/RepoInfo";
 import { TestItem, Items } from "./TestItem";
 import "./ItemsList.css";
 
-const Buttons = () => {
+interface ButtonsProps {
+  id: number;
+  html_url: string;
+}
+
+const Buttons = (props: ButtonsProps) => {
   const [like, setLike] = useState(false);
   function handleLike() {
     setLike((prev) => !prev);
   }
+
+  const copyText = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log("Text has been copy");
+      })
+      .catch((err) => {
+        console.error("Copy error:", err);
+      });
+  };
 
   return (
     <div className="buttons">
@@ -17,21 +33,28 @@ const Buttons = () => {
         {like ? (
           <img
             src="icons/heart_fill.svg"
-            alt="Like"
+            alt=""
             className="like-icon"
             onClick={handleLike}
           />
         ) : (
           <img
             src="icons/heart_outline.svg"
-            alt="Like"
+            alt=""
             className="like-icon"
             onClick={handleLike}
           />
         )}
-        <img src="icons/link 1.svg" alt="Copy" className="copy-icon" />
+        <img
+          src="icons/link 1.svg"
+          alt=""
+          className="copy-icon"
+          onClick={() => copyText(props.html_url)}
+        />
       </div>
-      <button className="btn-more">Подробнее</button>
+      <Link to={`/repository/${props.id}`} style={{ textDecoration: "none" }}>
+        <button className="btn-more">Подробнее</button>
+      </Link>
     </div>
   );
 };
@@ -88,21 +111,19 @@ interface ItemProps {
 
 const Item = ({ item }: ItemProps) => {
   return (
-    <Link to={`/repository/${item.id}`} style={{ textDecoration: "none" }}>
-      <div className="card">
-        <CardHeader
-          avatar_url={item.owner.avatar_url}
-          stargazers_count={item.stargazers_count}
-          forks_count={item.forks_count}
-        />
-        <NameContent
-          login={item.owner.login}
-          html_url={item.html_url}
-          full_name={item.full_name}
-        />
-        <Buttons />
-      </div>
-    </Link>
+    <div className="card">
+      <CardHeader
+        avatar_url={item.owner.avatar_url}
+        stargazers_count={item.stargazers_count}
+        forks_count={item.forks_count}
+      />
+      <NameContent
+        login={item.owner.login}
+        html_url={item.html_url}
+        full_name={item.full_name}
+      />
+      <Buttons id={item.id} html_url={item.html_url} />
+    </div>
   );
 };
 
