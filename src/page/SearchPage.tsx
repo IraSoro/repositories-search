@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ItemsList from "../components/ItemsList";
-import "./Search.css";
+import "./SearchPage.css";
 
 const SearchInput = () => {
   return (
