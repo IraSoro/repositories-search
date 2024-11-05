@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import RepoInfo from "../states/RepoInfo";
-import { TestItem, Items } from "./TestItem";
 import "./ItemsList.css";
 
 interface ButtonsProps {
@@ -127,12 +126,16 @@ const Item = ({ item }: ItemProps) => {
   );
 };
 
-const ItemsList = () => {
+interface ItemsListProps {
+  items: RepoInfo[];
+}
+
+const ItemsList = ({ items }: ItemsListProps) => {
   return (
     <>
       <div className="card-container">
-        {Items.map((item) => (
-          <Item key={item.id} item={TestItem} />
+        {items.map((item) => (
+          <Item key={item.id} item={item} />
         ))}
       </div>
     </>
