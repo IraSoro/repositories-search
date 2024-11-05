@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import RepoInfo from "../states/RepoInfo";
 import { TestItem, Items } from "./TestItem";
@@ -87,19 +88,21 @@ interface ItemProps {
 
 const Item = ({ item }: ItemProps) => {
   return (
-    <div className="card">
-      <CardHeader
-        avatar_url={item.owner.avatar_url}
-        stargazers_count={item.stargazers_count}
-        forks_count={item.forks_count}
-      />
-      <NameContent
-        login={item.owner.login}
-        html_url={item.html_url}
-        full_name={item.full_name}
-      />
-      <Buttons />
-    </div>
+    <Link to={`repository/${item.id}`} style={{ textDecoration: "none" }}>
+      <div className="card">
+        <CardHeader
+          avatar_url={item.owner.avatar_url}
+          stargazers_count={item.stargazers_count}
+          forks_count={item.forks_count}
+        />
+        <NameContent
+          login={item.owner.login}
+          html_url={item.html_url}
+          full_name={item.full_name}
+        />
+        <Buttons />
+      </div>
+    </Link>
   );
 };
 
