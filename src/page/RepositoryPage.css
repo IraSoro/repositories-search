@@ -1,0 +1,71 @@
+.general {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.profile-card {
+  background-color: #fff;
+  width: 100%;
+  max-width: 862px;
+  min-height: 544px;
+
+  border-radius: 20px;
+  padding: 0 32px;
+  box-sizing: border-box;
+
+  margin-top: 85px;
+  display: flex;
+  flex-direction: column;
+}
+
+p.profile {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Card Title */
+.title-container {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+  /* border: 1px solid #ddd; */
+  border-radius: 8px;
+  gap: 24px;
+}
+
+.avatar-container {
+  margin-right: 10px;
+}
+
+.avatar-title {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 24px;
+}
+
+.full-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3a3a3a;
+  margin: 0;
+}
+
+.description {
+  font-size: 20px;
+  color: #3a3a3a;
+  margin: 0;
+}
