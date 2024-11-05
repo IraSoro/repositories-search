@@ -20,7 +20,6 @@ const SearchPage = () => {
   useEffect(() => {
     const headersList = {
       Accept: "application/vnd.github+json",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)",
     };
 
     const value = "$%7Bvalue";

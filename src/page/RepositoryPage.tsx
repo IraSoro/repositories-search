@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { TestItem } from "../components/TestItem";
+import RepoInfo from "../states/RepoInfo";
 
 import "./RepositoryPage.css";
 
@@ -133,22 +133,49 @@ const Buttons = () => {
 
 const RepositoryPage = () => {
   const { id } = useParams<string>();
-  console.log("id = ", id);
-  const repository = TestItem;
+  const [repository, setRepository] = useState<RepoInfo | null>(null);
+
+  useEffect(() => {
+    const headersList = {
+      Accept: "application/vnd.github+json",
+    };
+
+    const url = `https://api.github.com/repositories/${id}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: headersList,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setRepository(data as RepoInfo);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, [id]);
 
   return (
     <div className="general">
-      <div className="profile-card">
-        <p className="profile">Профиль</p>
-        <TitleCard
-          full_name={repository.full_name}
-          avatar_url={repository.owner.avatar_url}
-          description={repository.description}
-        />
-        <ListInfo {...repository} />
-        <div className="divider" />
-        <Buttons />
-      </div>
+      {repository && (
+        <div className="profile-card">
+          <p className="profile">Профиль</p>
+          <TitleCard
+            full_name={repository.full_name}
+            avatar_url={repository.owner.avatar_url}
+            description={repository.description}
+          />
+          <ListInfo {...repository} />
+          <div className="divider" />
+          <Buttons />
+        </div>
+      )}
     </div>
   );
 };
