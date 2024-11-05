@@ -1,23 +1,29 @@
+import { Link } from "react-router-dom";
+
 import "./Header.css";
 
 const Header = () => {
   return (
     <div className="header">
       <div className="top">
-        <div className="left">
-          <img
-            src="icons/search_new.svg"
-            alt="Search Icon"
-            className="icons icon-search"
-          />
-          <p className="header-text">GitHubSearch</p>
-        </div>
+        <Link to="/" className="link">
+          <div className="left">
+            <img
+              src="icons/search_new.svg"
+              alt="Search Icon"
+              className="icons icon-search"
+            />
+            <p className="header-text">GitHubSearch</p>
+          </div>
+        </Link>
         <div className="right">
-          <img
-            src="icons/heart_simple.svg"
-            alt="Heart Icon"
-            className="icon-heart"
-          />
+          <Link to="/favorites">
+            <img
+              src="icons/heart_simple.svg"
+              alt="Heart Icon"
+              className="icon-heart"
+            />
+          </Link>
           <div className="account-outside">
             <img
               src="icons/account.svg"

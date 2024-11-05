@@ -1,13 +1,19 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import SearchPage from "./page/SearchPage";
+import FavoritesPage from "./page/FavoritesPage";
 import "./App.css";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Header />
-      <SearchPage />
-    </>
+      <Routes>
+        <Route path="/" element={<SearchPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

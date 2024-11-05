@@ -62,3 +62,8 @@ p.header-text {
   border-radius: 8px;
   padding: 6px;
 }
+
+.link:hover {
+  text-decoration: none;
+  color: #3a3a3a;
+}
