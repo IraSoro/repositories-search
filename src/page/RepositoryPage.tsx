@@ -34,7 +34,7 @@ interface ShortInfoProps {
 const ShortInfo = (props: ShortInfoProps) => {
   return (
     <div className="info-card">
-      <img src={`/public/icons/${props.icon}`} alt="" className="info-icon" />
+      <img src={`/icons/${props.icon}`} alt="" className="info-icon" />
       <div className="info-text">
         <p className="info-value">{props.value}</p>
         <p className="info-description">{props.description}</p>
@@ -109,17 +109,17 @@ const Buttons = () => {
   return (
     <div className="card-buttons">
       <div className="card-btn-icons">
-        <img src="/public/icons/link 1.svg" alt="" className="card-copy-icon" />
+        <img src="/icons/link 1.svg" alt="" className="card-copy-icon" />
         {like ? (
           <img
-            src="/public/icons/heart_fill.svg"
+            src="/icons/heart_fill.svg"
             alt=""
             className="card-like-icon"
             onClick={handleLike}
           />
         ) : (
           <img
-            src="/public/icons/heart_outline.svg"
+            src="/icons/heart_outline.svg"
             alt=""
             className="card-like-icon"
             onClick={handleLike}
