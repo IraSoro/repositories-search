@@ -15,7 +15,7 @@ const SearchPage = () => {
     <div>
       <div className="general-outside">
         <SearchInput />
-        <ResultAndSort />
+        <ResultAndSort title="Result: 100 repositories" />
         <ItemsList />
       </div>
     </div>

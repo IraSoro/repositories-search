@@ -7,7 +7,7 @@ const FavoritesPage = () => {
   return (
     <div>
       <div className="general">
-        <ResultAndSort />
+        <ResultAndSort title="Favorites: 4"/>
         <ItemsList />
       </div>
     </div>
