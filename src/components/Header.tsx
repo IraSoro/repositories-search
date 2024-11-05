@@ -2,6 +2,21 @@ import { Link } from "react-router-dom";
 
 import "./Header.css";
 
+const Title = () => {
+  return (
+    <Link to="/" className="link">
+      <div className="left">
+        <img
+          src="icons/search_new.svg"
+          alt="Search Icon"
+          className="icons icon-search"
+        />
+        <p className="header-text">GitHubSearch</p>
+      </div>
+    </Link>
+  );
+};
+
 interface FavoritesProps {
   favorites: number;
 }
@@ -29,16 +44,7 @@ const Header = (props: HeaderProps) => {
   return (
     <div className="header">
       <div className="top">
-        <Link to="/" className="link">
-          <div className="left">
-            <img
-              src="icons/search_new.svg"
-              alt="Search Icon"
-              className="icons icon-search"
-            />
-            <p className="header-text">GitHubSearch</p>
-          </div>
-        </Link>
+        <Title />
         <div className="right">
           <FavoritesIcon favorites={props.favorites} />
           <div className="account-outside">
