@@ -1,4 +1,4 @@
-import { useState } from "react";
+import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
 import "./SearchPage.css";
 
@@ -10,39 +10,12 @@ const SearchInput = () => {
   );
 };
 
-const ResultSort = () => {
-  const [selectedValue, setSelectedValue] = useState("none");
-
-  return (
-    <div className="result-general">
-      <p className="result-title">Result: 100 repositories</p>
-      <div className="result-sort">
-        <select
-          className="sort-select"
-          value={selectedValue}
-          onChange={(event) => {
-            setSelectedValue(event.target.value);
-          }}
-        >
-          <option value="none" disabled>
-            Sort by
-          </option>
-          <option value="alphabet">alphabet</option>
-          <option value="star">star</option>
-          <option value="fork">fork</option>
-        </select>
-      </div>
-    </div>
-  );
-};
-
 const SearchPage = () => {
   return (
     <div>
-      {/* <Header /> */}
       <div className="general-outside">
         <SearchInput />
-        <ResultSort />
+        <ResultAndSort />
         <ItemsList />
       </div>
     </div>
