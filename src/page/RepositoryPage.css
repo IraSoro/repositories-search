@@ -149,7 +149,14 @@ p.profile {
   border-radius: 8px;
   border: none;
   padding: 12px 16px;
+  display: flex;
+  align-items: center;
   box-sizing: border-box;
+  text-decoration: none;
+}
+
+.btn-open:active {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-btn-icons {
@@ -163,9 +170,15 @@ p.profile {
   border-radius: 8px;
   border: 1px solid rgba(58, 58, 58, 0.12);
   padding: 4px;
+  cursor: pointer;
+}
+
+.card-copy-icon:active {
+  background-color: rgba(58, 58, 58, 0.1);
 }
 
 .card-like-icon {
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }

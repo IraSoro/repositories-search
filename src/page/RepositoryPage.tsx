@@ -100,33 +100,50 @@ const ListInfo = (props: ListInfoProps) => {
   );
 };
 
-const Buttons = () => {
-  const [like, setLike] = useState(false);
-  function handleLike() {
-    setLike((prev) => !prev);
-  }
+interface ButtonsProps {
+  html_url: string;
+  isLike: boolean;
+  updateIsLike: () => void;
+}
+
+const Buttons = (props: ButtonsProps) => {
+  const copyText = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log("Text has been copy");
+      })
+      .catch((err) => {
+        console.error("Copy error:", err);
+      });
+  };
 
   return (
     <div className="card-buttons">
       <div className="card-btn-icons">
-        <img src="/icons/link 1.svg" alt="" className="card-copy-icon" />
-        {like ? (
-          <img
-            src="/icons/heart_fill.svg"
-            alt=""
-            className="card-like-icon"
-            onClick={handleLike}
-          />
-        ) : (
-          <img
-            src="/icons/heart_outline.svg"
-            alt=""
-            className="card-like-icon"
-            onClick={handleLike}
-          />
-        )}
+        <img
+          src="/icons/link 1.svg"
+          alt=""
+          className="card-copy-icon"
+          onClick={() => copyText(props.html_url)}
+        />
+        <img
+          src={
+            props.isLike ? "/icons/heart_fill.svg" : "/icons/heart_outline.svg"
+          }
+          alt=""
+          className="card-like-icon"
+          onClick={props.updateIsLike}
+        />
       </div>
-      <button className="btn-open">Открыть репозиторий</button>
+      <a
+        className="btn-open"
+        href={props.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Открыть репозиторий
+      </a>
     </div>
   );
 };
@@ -134,6 +151,7 @@ const Buttons = () => {
 const RepositoryPage = () => {
   const { id } = useParams<string>();
   const [repository, setRepository] = useState<RepoInfo | null>(null);
+  const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
     const headersList = {
@@ -148,18 +166,57 @@ const RepositoryPage = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status}`);
+          throw new Error(`Error: ${response.status}`);
         }
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        setRepository(data as RepoInfo);
+        const favoriteItems = JSON.parse(
+          localStorage.getItem("favorites") || "[]"
+        );
+        const favoriteIds = favoriteItems.map(
+          (item: { id: number }) => item.id
+        );
+        const newIsLike = favoriteIds.includes(data.id);
+
+        setRepository({
+          ...(data as RepoInfo),
+          isLike: newIsLike,
+        });
+        setIsLike(newIsLike);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }, [id]);
+
+  const addFavorite = () => {
+    if (!repository) return;
+
+    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    repository.isLike = true;
+    favoriteItems.push(repository);
+    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
+  };
+
+  const removeFavorite = () => {
+    if (!repository) return;
+
+    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const updatedFavorites = favoriteItems.filter(
+      (favItem: RepoInfo) => favItem.id !== repository.id
+    );
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  function updateIsLike() {
+    if (isLike) {
+      removeFavorite();
+    } else {
+      addFavorite();
+    }
+    setIsLike((prev) => !prev);
+  }
 
   return (
     <div className="general">
@@ -173,7 +230,11 @@ const RepositoryPage = () => {
           />
           <ListInfo {...repository} />
           <div className="divider" />
-          <Buttons />
+          <Buttons
+            html_url={repository.html_url}
+            isLike={isLike}
+            updateIsLike={updateIsLike}
+          />
         </div>
       )}
     </div>
