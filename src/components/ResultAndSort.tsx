@@ -1,31 +1,29 @@
-import { useState } from "react";
-
 import "./ResultAndSort.css";
 
 interface ResultAndSortProps {
   title: string;
+  selectedValue: string;
+  setSelectedValue: (newValue: string) => void;
 }
 
 const ResultAndSort = (props: ResultAndSortProps) => {
-  const [selectedValue, setSelectedValue] = useState("none");
-
   return (
     <div className="result-general">
       <p className="result-title">{props.title}</p>
       <div className="result-sort">
         <select
           className="sort-select"
-          value={selectedValue}
+          value={props.selectedValue}
           onChange={(event) => {
-            setSelectedValue(event.target.value);
+            props.setSelectedValue(event.target.value);
           }}
         >
           <option value="none" disabled>
             Sort by
           </option>
-          <option value="alphabet">alphabet</option>
-          <option value="star">star</option>
-          <option value="fork">fork</option>
+          <option value="stars">Stars</option>
+          <option value="forks">Forks</option>
+          <option value="updated">Updated</option>
         </select>
       </div>
     </div>

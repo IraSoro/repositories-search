@@ -36,6 +36,7 @@ const SearchInput = (props: SearchInput) => {
 const SearchPage = () => {
   const [repos, setRepos] = useState<RepoInfo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [selectedValue, setSelectedValue] = useState("none");
   const [inputValue, setInputValue] = useState("");
   const [page, setPage] = useState(1);
 
@@ -45,7 +46,7 @@ const SearchPage = () => {
       Accept: "application/vnd.github+json",
     };
 
-    const url = `https://api.github.com/search/repositories?q=${inputValue}&per_page=12&page=${page}`;
+    const url = `https://api.github.com/search/repositories?q=${inputValue}&per_page=12&page=${page}&sort=${selectedValue}`;
 
     fetch(url, {
       method: "GET",
@@ -71,7 +72,7 @@ const SearchPage = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [inputValue, page]);
+  }, [inputValue, page, selectedValue]);
 
   useEffect(() => {
     // scroll
@@ -105,7 +106,11 @@ const SearchPage = () => {
   return (
     <div className="general-outside">
       <SearchInput value={inputValue} setValue={setInputValue} />
-      <ResultAndSort title={`Result: ${totalCount} repositories`} />
+      <ResultAndSort
+        title={`Result: ${totalCount} repositories`}
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+      />
       <ItemsList items={repos} />
     </div>
   );
