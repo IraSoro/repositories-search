@@ -34,7 +34,6 @@ p.profile {
 /* Card Title */
 .title-container {
   display: flex;
-  flex-wrap: wrap;
   gap: 24px;
 }
 
@@ -69,6 +68,16 @@ p.profile {
   margin: 0;
 }
 
+@media (max-width: 600px) {
+  .title-container {
+    flex-wrap: wrap;
+  }
+
+  .info-container {
+    flex-grow: 1;
+  }
+}
+
 /* Short Info */
 .short-info-container {
   display: flex;
@@ -90,7 +99,7 @@ p.profile {
   box-sizing: border-box;
 }
 
-.info-icon{
+.info-icon {
   height: 16px;
   width: 16px;
 
@@ -99,7 +108,7 @@ p.profile {
   border-radius: 50px;
 }
 
-.info-text{
+.info-text {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -113,19 +122,19 @@ p.profile {
 
 .info-description {
   font-size: 14px;
-  color: #84868C;
+  color: #84868c;
   margin: 0;
 }
 
 /* Divider */
-.divider{
+.divider {
   height: 1px;
   width: 100%;
   background-color: rgba(33, 34, 35, 0.08);
 }
 
 /*Buttons */
-.card-buttons{
+.card-buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
