@@ -75,9 +75,26 @@ const SearchPage = () => {
 
   useEffect(() => {
     // scroll
+    const isCheckPosition = () => {
+      const height = document.body.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const scrolled = window.scrollY;
+
+      const threshold = height - screenHeight / 4;
+      const position = scrolled + screenHeight;
+
+      if (position >= threshold) {
+        return true;
+      }
+      return false;
+    };
+
     const throttledScroll = throttle(() => {
+      if (!isCheckPosition()) {
+        return;
+      }
       setPage((prevPage) => prevPage + 1);
-    }, 1 * 1000);
+    }, 500);
     window.addEventListener("scroll", throttledScroll);
 
     return () => {
