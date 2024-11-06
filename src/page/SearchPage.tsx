@@ -54,19 +54,28 @@ const SearchPage = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status}`);
+          throw new Error(`Error: ${response.status}`);
         }
         return response.json();
       })
       .then((data) => {
+        const favoriteItems = JSON.parse(
+          localStorage.getItem("favorites") || "[]"
+        );
+        const favoriteIds = favoriteItems.map(
+          (item: { id: number }) => item.id
+        );
+
+        const updatedItems = (data.items as RepoInfo[]).map((item) => ({
+          ...item,
+          isLike: favoriteIds.includes(item.id),
+        }));
+
         if (page === 1) {
           setTotalCount(data.total_count);
-          setRepos(data.items as RepoInfo[]);
+          setRepos(updatedItems);
         } else {
-          setRepos((prevRepos) => [
-            ...prevRepos,
-            ...(data.items as RepoInfo[]),
-          ]);
+          setRepos((prevRepos) => [...prevRepos, ...updatedItems]);
         }
       })
       .catch((error) => {

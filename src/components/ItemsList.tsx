@@ -7,14 +7,11 @@ import "./ItemsList.css";
 interface ButtonsProps {
   id: number;
   html_url: string;
+  isLike: boolean;
+  updateIsLike: () => void;
 }
 
 const Buttons = (props: ButtonsProps) => {
-  const [like, setLike] = useState(false);
-  function handleLike() {
-    setLike((prev) => !prev);
-  }
-
   const copyText = (text: string) => {
     navigator.clipboard
       .writeText(text)
@@ -29,21 +26,14 @@ const Buttons = (props: ButtonsProps) => {
   return (
     <div className="buttons">
       <div className="btn-icons">
-        {like ? (
-          <img
-            src="icons/heart_fill.svg"
-            alt=""
-            className="like-icon"
-            onClick={handleLike}
-          />
-        ) : (
-          <img
-            src="icons/heart_outline.svg"
-            alt=""
-            className="like-icon"
-            onClick={handleLike}
-          />
-        )}
+        <img
+          src={
+            props.isLike ? "icons/heart_fill.svg" : "icons/heart_outline.svg"
+          }
+          alt=""
+          className="like-icon"
+          onClick={props.updateIsLike}
+        />
         <img
           src="icons/link 1.svg"
           alt=""
@@ -109,6 +99,31 @@ interface ItemProps {
 }
 
 const Item = ({ item }: ItemProps) => {
+  const [isLike, setIsLike] = useState(item.isLike);
+
+  const addFavorite = () => {
+    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    favoriteItems.push(item);
+    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
+  };
+
+  const removeFavorite = () => {
+    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const updatedFavorites = favoriteItems.filter(
+      (favItem: RepoInfo) => favItem.id !== item.id
+    );
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  function updateIsLike() {
+    if (isLike) {
+      removeFavorite();
+    } else {
+      addFavorite();
+    }
+    setIsLike((prev) => !prev);
+  }
+
   return (
     <div className="card">
       <CardHeader
@@ -121,7 +136,12 @@ const Item = ({ item }: ItemProps) => {
         html_url={item.html_url}
         full_name={item.full_name}
       />
-      <Buttons id={item.id} html_url={item.html_url} />
+      <Buttons
+        id={item.id}
+        html_url={item.html_url}
+        isLike={isLike}
+        updateIsLike={updateIsLike}
+      />
     </div>
   );
 };

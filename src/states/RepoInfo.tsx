@@ -18,6 +18,7 @@ interface RepoInfo {
   forks: number;
   archived: boolean;
   language: string;
+  isLike: boolean;
 }
 
 export default RepoInfo;
