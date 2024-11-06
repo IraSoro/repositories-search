@@ -3,7 +3,7 @@ import "./ResultAndSort.css";
 interface ResultAndSortProps {
   title: string;
   selectedValue: string;
-  setSelectedValue: (newValue: string) => void;
+  updateSelect: (newValue: string) => void;
 }
 
 const ResultAndSort = (props: ResultAndSortProps) => {
@@ -15,7 +15,7 @@ const ResultAndSort = (props: ResultAndSortProps) => {
           className="sort-select"
           value={props.selectedValue}
           onChange={(event) => {
-            props.setSelectedValue(event.target.value);
+            props.updateSelect(event.target.value);
           }}
         >
           <option value="none" disabled>

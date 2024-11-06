@@ -10,12 +10,12 @@ import "./SearchPage.css";
 
 interface SearchInput {
   value: string;
-  setValue: (newValue: string) => void;
+  updateValue: (newValue: string) => void;
 }
 
 const SearchInput = (props: SearchInput) => {
   function changeInput(newValue: string) {
-    props.setValue(newValue);
+    props.updateValue(newValue);
   }
   const debounceInput = debounce(changeInput, 500);
 
@@ -103,13 +103,23 @@ const SearchPage = () => {
     };
   }, []);
 
+  const updateInput = (newValue: string) => {
+    setInputValue(newValue);
+    setPage(1);
+  };
+
+  const updateSelect = (newValue: string) => {
+    setSelectedValue(newValue);
+    setPage(1);
+  };
+
   return (
     <div className="general-outside">
-      <SearchInput value={inputValue} setValue={setInputValue} />
+      <SearchInput value={inputValue} updateValue={updateInput} />
       <ResultAndSort
         title={`Result: ${totalCount} repositories`}
         selectedValue={selectedValue}
-        setSelectedValue={setSelectedValue}
+        updateSelect={updateSelect}
       />
       <ItemsList items={repos} />
     </div>
