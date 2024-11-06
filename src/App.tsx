@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
   return (
     <BrowserRouter>
-      <Header favorites={0} />
+      <Header />
       <Routes>
         <Route path="/" element={<SearchPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />

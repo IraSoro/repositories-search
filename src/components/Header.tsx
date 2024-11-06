@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 
+import { observer } from "mobx-react";
+import favoritesStore from "../store/favoritesStore";
+
 import "./Header.css";
 
 const Title = () => {
@@ -17,11 +20,7 @@ const Title = () => {
   );
 };
 
-interface FavoritesProps {
-  favorites: number;
-}
-
-const FavoritesIcon = (props: FavoritesProps) => {
+const FavoritesIcon = observer(() => {
   return (
     <Link to="/favorites">
       <div className="icon-heart-container">
@@ -30,23 +29,21 @@ const FavoritesIcon = (props: FavoritesProps) => {
           alt="Heart Icon"
           className="icon-heart"
         />
-        {props.favorites > 0 && <div className="badge">{props.favorites}</div>}
+        {favoritesStore.favoritesCount > 0 && (
+          <div className="badge">{favoritesStore.favoritesCount}</div>
+        )}
       </div>
     </Link>
   );
-};
+});
 
-interface HeaderProps {
-  favorites: number;
-}
-
-const Header = (props: HeaderProps) => {
+const Header = () => {
   return (
     <div className="header">
       <div className="top">
         <Title />
         <div className="right">
-          <FavoritesIcon favorites={props.favorites} />
+          <FavoritesIcon />
           <div className="account-outside">
             <img
               src="icons/account.svg"
