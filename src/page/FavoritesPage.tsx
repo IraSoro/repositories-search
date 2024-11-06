@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import RepoInfo from "../states/RepoInfo";
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
 
@@ -21,12 +23,27 @@ const BackButton = () => {
 };
 
 const FavoritesPage = () => {
+  const [favItems, setFavItems] = useState<RepoInfo[]>([]);
+  const [selectedValue, setSelectedValue] = useState("none");
+  const updateSelect = (newValue: string) => {
+    setSelectedValue(newValue);
+  };
+
+  useEffect(() => {
+    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    setFavItems([...favoriteItems]);
+  }, []);
+
   return (
     <div>
       <div className="general">
         <BackButton />
-        <ResultAndSort title="Favorites: 4" />
-        <ItemsList />
+        <ResultAndSort
+          title={`Favorites: ${favItems.length}`}
+          selectedValue={selectedValue}
+          updateSelect={updateSelect}
+        />
+        <ItemsList items={favItems} />
       </div>
     </div>
   );

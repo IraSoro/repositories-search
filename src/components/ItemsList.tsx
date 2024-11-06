@@ -103,6 +103,7 @@ const Item = ({ item }: ItemProps) => {
 
   const addFavorite = () => {
     const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+    item.isLike = true;
     favoriteItems.push(item);
     localStorage.setItem("favorites", JSON.stringify(favoriteItems));
   };
