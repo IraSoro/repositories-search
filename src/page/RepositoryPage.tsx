@@ -174,20 +174,27 @@ const RepositoryPage = observer(() => {
         return response.json();
       })
       .then((data) => {
-        const newIsLike = favoritesStore.hasFavorite(data.id);
         setRepository({
           ...(data as RepoInfo),
-          isLike: newIsLike,
+          isLike: false,
         });
-        setIsLike(newIsLike);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }, [id]);
 
+  useEffect(() => {
+    if (!repository) return;
+
+    const newIsLike = favoritesStore.hasFavorite(Number(id));
+    repository.isLike = newIsLike;
+    setIsLike(newIsLike);
+  }, [id, repository]);
+
   function updateIsLike() {
     if (!repository) return;
+
     favoritesStore.toggleFavorite(repository);
     setIsLike((prev) => !prev);
   }

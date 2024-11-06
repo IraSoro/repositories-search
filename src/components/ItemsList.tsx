@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { observer } from "mobx-react";
@@ -102,7 +102,13 @@ interface ItemProps {
 }
 
 const Item = observer(({ item }: ItemProps) => {
-  const [isLike, setIsLike] = useState(item.isLike);
+  const [isLike, setIsLike] = useState(false);
+
+  useEffect(() => {
+    const newIsLike = favoritesStore.hasFavorite(item.id);
+    item.isLike = newIsLike;
+    setIsLike(newIsLike);
+  }, [item]);
 
   function updateIsLike() {
     favoritesStore.toggleFavorite(item);

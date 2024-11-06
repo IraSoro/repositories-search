@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { observer } from "mobx-react";
-import favoritesStore from "../store/favoritesStore";
-
 import RepoInfo from "../states/RepoInfo";
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
@@ -36,7 +33,7 @@ const SearchInput = (props: SearchInput) => {
   );
 };
 
-const SearchPage = observer(() => {
+const SearchPage = () => {
   const [repos, setRepos] = useState<RepoInfo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [selectedValue, setSelectedValue] = useState("none");
@@ -64,7 +61,7 @@ const SearchPage = observer(() => {
       .then((data) => {
         const updatedItems = (data.items as RepoInfo[]).map((item) => ({
           ...item,
-          isLike: favoritesStore.hasFavorite(item.id),
+          isLike: false,
         }));
 
         if (page === 1) {
@@ -129,6 +126,6 @@ const SearchPage = observer(() => {
       <ItemsList items={repos} />
     </div>
   );
-});
+};
 
 export default SearchPage;
