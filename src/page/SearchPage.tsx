@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import RepoInfo from "../states/RepoInfo";
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
+
+import { debounce, throttle } from "../utils/utils";
+
 import "./SearchPage.css";
 
 interface SearchInput {
@@ -11,6 +14,11 @@ interface SearchInput {
 }
 
 const SearchInput = (props: SearchInput) => {
+  function changeInput(newValue: string) {
+    props.setValue(newValue);
+  }
+  const debounceInput = debounce(changeInput, 500);
+
   return (
     <div className="search-outside">
       <input
@@ -18,7 +26,7 @@ const SearchInput = (props: SearchInput) => {
         className="search-input"
         placeholder="Search"
         onChange={(e) => {
-          props.setValue(e.target.value);
+          debounceInput(e.target.value);
         }}
       />
     </div>
@@ -29,13 +37,15 @@ const SearchPage = () => {
   const [repos, setRepos] = useState<RepoInfo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [inputValue, setInputValue] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
+    // fetch
     const headersList = {
       Accept: "application/vnd.github+json",
     };
 
-    const url = `https://api.github.com/search/repositories?q=${inputValue}&per_page=12&page=1`;
+    const url = `https://api.github.com/search/repositories?q=${inputValue}&per_page=12&page=${page}`;
 
     fetch(url, {
       method: "GET",
@@ -48,21 +58,38 @@ const SearchPage = () => {
         return response.json();
       })
       .then((data) => {
-        setTotalCount(data.total_count);
-        setRepos(data.items as RepoInfo[]);
+        if (page === 1) {
+          setTotalCount(data.total_count);
+          setRepos(data.items as RepoInfo[]);
+        } else {
+          setRepos((prevRepos) => [
+            ...prevRepos,
+            ...(data.items as RepoInfo[]),
+          ]);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [inputValue]);
+  }, [inputValue, page]);
+
+  useEffect(() => {
+    // scroll
+    const throttledScroll = throttle(() => {
+      setPage((prevPage) => prevPage + 1);
+    }, 1 * 1000);
+    window.addEventListener("scroll", throttledScroll);
+
+    return () => {
+      window.removeEventListener("scroll", throttledScroll);
+    };
+  }, []);
 
   return (
-    <div>
-      <div className="general-outside">
-        <SearchInput value={inputValue} setValue={setInputValue} />
-        <ResultAndSort title={`Result: ${totalCount} repositories`} />
-        <ItemsList items={repos} />
-      </div>
+    <div className="general-outside">
+      <SearchInput value={inputValue} setValue={setInputValue} />
+      <ResultAndSort title={`Result: ${totalCount} repositories`} />
+      <ItemsList items={repos} />
     </div>
   );
 };
