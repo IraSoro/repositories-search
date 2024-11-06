@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { observer } from "mobx-react";
+import favoritesStore from "../store/favoritesStore";
+
 import RepoInfo from "../states/RepoInfo";
 
 import "./RepositoryPage.css";
@@ -148,7 +151,7 @@ const Buttons = (props: ButtonsProps) => {
   );
 };
 
-const RepositoryPage = () => {
+const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
   const [repository, setRepository] = useState<RepoInfo | null>(null);
   const [isLike, setIsLike] = useState(false);
@@ -171,14 +174,7 @@ const RepositoryPage = () => {
         return response.json();
       })
       .then((data) => {
-        const favoriteItems = JSON.parse(
-          localStorage.getItem("favorites") || "[]"
-        );
-        const favoriteIds = favoriteItems.map(
-          (item: { id: number }) => item.id
-        );
-        const newIsLike = favoriteIds.includes(data.id);
-
+        const newIsLike = favoritesStore.hasFavorite(data.id);
         setRepository({
           ...(data as RepoInfo),
           isLike: newIsLike,
@@ -190,31 +186,9 @@ const RepositoryPage = () => {
       });
   }, [id]);
 
-  const addFavorite = () => {
-    if (!repository) return;
-
-    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
-    repository.isLike = true;
-    favoriteItems.push(repository);
-    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
-  };
-
-  const removeFavorite = () => {
-    if (!repository) return;
-
-    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const updatedFavorites = favoriteItems.filter(
-      (favItem: RepoInfo) => favItem.id !== repository.id
-    );
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
-
   function updateIsLike() {
-    if (isLike) {
-      removeFavorite();
-    } else {
-      addFavorite();
-    }
+    if (!repository) return;
+    favoritesStore.toggleFavorite(repository);
     setIsLike((prev) => !prev);
   }
 
@@ -239,6 +213,6 @@ const RepositoryPage = () => {
       )}
     </div>
   );
-};
+});
 
 export default RepositoryPage;

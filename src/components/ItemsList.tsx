@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { observer } from "mobx-react";
+import favoritesStore from "../store/favoritesStore";
+
 import RepoInfo from "../states/RepoInfo";
 import "./ItemsList.css";
 
@@ -98,30 +101,11 @@ interface ItemProps {
   item: RepoInfo;
 }
 
-const Item = ({ item }: ItemProps) => {
+const Item = observer(({ item }: ItemProps) => {
   const [isLike, setIsLike] = useState(item.isLike);
 
-  const addFavorite = () => {
-    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
-    item.isLike = true;
-    favoriteItems.push(item);
-    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
-  };
-
-  const removeFavorite = () => {
-    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const updatedFavorites = favoriteItems.filter(
-      (favItem: RepoInfo) => favItem.id !== item.id
-    );
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
-
   function updateIsLike() {
-    if (isLike) {
-      removeFavorite();
-    } else {
-      addFavorite();
-    }
+    favoritesStore.toggleFavorite(item);
     setIsLike((prev) => !prev);
   }
 
@@ -145,7 +129,7 @@ const Item = ({ item }: ItemProps) => {
       />
     </div>
   );
-};
+});
 
 interface ItemsListProps {
   items: RepoInfo[];

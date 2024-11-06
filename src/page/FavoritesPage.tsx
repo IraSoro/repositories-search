@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import RepoInfo from "../states/RepoInfo";
+import { observer } from "mobx-react";
+import favoritesStore from "../store/favoritesStore";
+
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
 
@@ -22,31 +24,25 @@ const BackButton = () => {
   );
 };
 
-const FavoritesPage = () => {
-  const [favItems, setFavItems] = useState<RepoInfo[]>([]);
+const FavoritesPage = observer(() => {
   const [selectedValue, setSelectedValue] = useState("none");
   const updateSelect = (newValue: string) => {
     setSelectedValue(newValue);
   };
-
-  useEffect(() => {
-    const favoriteItems = JSON.parse(localStorage.getItem("favorites") || "[]");
-    setFavItems([...favoriteItems]);
-  }, []);
 
   return (
     <div>
       <div className="general">
         <BackButton />
         <ResultAndSort
-          title={`Favorites: ${favItems.length}`}
+          title={`Favorites: ${favoritesStore.favoritesCount}`}
           selectedValue={selectedValue}
           updateSelect={updateSelect}
         />
-        <ItemsList items={favItems} />
+        <ItemsList items={favoritesStore.favorites} />
       </div>
     </div>
   );
-};
+});
 
 export default FavoritesPage;

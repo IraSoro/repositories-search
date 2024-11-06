@@ -14,6 +14,10 @@ class FavoritesStore {
     return this.favorites.length;
   }
 
+  hasFavorite(id: number): boolean {
+    return this.favorites.some((favItem) => favItem.id === id);
+  }
+
   addFavorite(item: RepoInfo) {
     item.isLike = true;
     this.favorites.push(item);
