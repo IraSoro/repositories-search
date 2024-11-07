@@ -1,40 +1,39 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { observer } from "mobx-react";
-import favoritesStore from "../store/favorites_store";
 
-import { RepoInformation } from "../data/repo_information";
+import favoritesStore from "../store/favorites_store";
+import { RepoInformation, RepoInformationEnriched } from "../data/repo_information";
 
 import "./RepositoryPage.css";
 
-interface TitleCardProps {
-  full_name: string;
-  avatar_url: string;
+interface RepositoryCardHeaderProps {
+  fullName: string;
+  avatarUrl: string;
   description: string;
 }
 
-const TitleCard = (props: TitleCardProps) => {
+const RepositoryCardHeader = (props: RepositoryCardHeaderProps) => {
   return (
     <div className="title-container">
       <div className="avatar-container">
-        <img src={props.avatar_url} alt="Avatar" className="avatar-title" />
+        <img src={props.avatarUrl} alt="Avatar" className="avatar-title" />
       </div>
       <div className="info-container">
-        <p className="full-name">{props.full_name}</p>
+        <p className="full-name">{props.fullName}</p>
         <p className="description">{props.description}</p>
       </div>
     </div>
   );
 };
 
-interface ShortInfoProps {
+interface RepositoryCardInformationProps {
   icon: string;
   value: string;
   description: string;
 }
 
-const ShortInfo = (props: ShortInfoProps) => {
+const RepositoryCardInformation = (props: RepositoryCardInformationProps) => {
   return (
     <div className="info-card">
       <img src={`/icons/${props.icon}`} alt="" className="info-icon" />
@@ -46,7 +45,7 @@ const ShortInfo = (props: ShortInfoProps) => {
   );
 };
 
-interface ListInfoProps {
+interface RepositoryCardStatisticsProps {
   stargazers_count: number;
   forks_count: number;
   archived: boolean;
@@ -55,7 +54,7 @@ interface ListInfoProps {
   updated_at: string;
 }
 
-const ListInfo = (props: ListInfoProps) => {
+const RepositoryCardStatistics = (props: RepositoryCardStatisticsProps) => {
   const infoList = [
     {
       icon: "star 1.svg",
@@ -90,9 +89,9 @@ const ListInfo = (props: ListInfoProps) => {
   ];
 
   return (
-    <div className="short-info-container">
+    <div className="repository-card-statistics-container">
       {infoList.map((info, index) => (
-        <ShortInfo
+        <RepositoryCardInformation
           key={index}
           icon={info.icon}
           value={info.value}
@@ -103,24 +102,17 @@ const ListInfo = (props: ListInfoProps) => {
   );
 };
 
-interface ButtonsProps {
-  html_url: string;
-  isLike: boolean;
-  updateIsLike: () => void;
+interface RepoActionsButtonsProps {
+  htmlUrl: string;
+  isLiked: boolean;
+  onToggleFavorite: () => void;
 }
 
-const copyText = (text: string) => {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      console.log("Text has been copy");
-    })
-    .catch((err) => {
-      console.error("Copy error:", err);
-    });
-};
+const RepositoryCardActionButtons = (props: RepoActionsButtonsProps) => {
+  const copyToClipboard = useCallback(async () => {
+    await navigator.clipboard.writeText(props.htmlUrl);
+  }, [props]);
 
-const Buttons = (props: ButtonsProps) => {
   return (
     <div className="card-buttons">
       <div className="card-btn-icons">
@@ -128,20 +120,20 @@ const Buttons = (props: ButtonsProps) => {
           src="/icons/link 1.svg"
           alt=""
           className="card-copy-icon"
-          onClick={() => copyText(props.html_url)}
+          onClick={copyToClipboard}
         />
         <img
           src={
-            props.isLike ? "/icons/heart_fill.svg" : "/icons/heart_outline.svg"
+            props.isLiked ? "/icons/heart_fill.svg" : "/icons/heart_outline.svg"
           }
           alt=""
           className="card-like-icon"
-          onClick={props.updateIsLike}
+          onClick={props.onToggleFavorite}
         />
       </div>
       <a
         className="btn-open"
-        href={props.html_url}
+        href={props.htmlUrl}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -151,71 +143,84 @@ const Buttons = (props: ButtonsProps) => {
   );
 };
 
+interface RepositoryCardProps {
+  repository: RepoInformationEnriched | null;
+  onToggleFavorite: () => void;
+}
+
+const RepositoryCard = (props: RepositoryCardProps) => {
+  if (!props.repository) {
+    return null;
+  }
+
+  return (
+    <div className="profile-card">
+      <p className="profile">Профиль</p>
+      <RepositoryCardHeader
+        fullName={props.repository.full_name}
+        avatarUrl={props.repository.owner.avatar_url}
+        description={props.repository.description}
+      />
+      <RepositoryCardStatistics {...props.repository} />
+      <RepositoryCardActionButtons
+        htmlUrl={props.repository.html_url}
+        isLiked={props.repository.is_liked}
+        onToggleFavorite={props.onToggleFavorite}
+      />
+    </div>
+  );
+};
+
 const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
-  const [repository, setRepository] = useState<RepoInformation | null>(null);
-  const [isLike, setIsLike] = useState(false);
+  const [repository, setRepository] = useState<RepoInformationEnriched | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
 
-  useEffect(() => {
-    const headersList = {
-      Accept: "application/vnd.github+json",
-    };
+  const getRepositoryInfo = useCallback(async () => {
+    const resp = await fetch(`https://api.github.com/repositories/${id}`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN as string}`,
+      },
+    });
 
-    const url = `https://api.github.com/repositories/${id}`;
+    if (resp.status !== 200) {
+      throw new Error(`Github returned non-200 status code[${resp.status}]: ${await resp.json()}`);
+    }
 
-    fetch(url, {
-      method: "GET",
-      headers: headersList,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRepository({
-          ...(data as RepoInformation),
-          is_liked: favoritesStore.hasFavorite(Number(id)),
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    return await resp.json() as RepoInformation;
   }, [id]);
 
   useEffect(() => {
-    if (!repository) return;
-    setIsLike(repository.is_liked);
-  }, [repository]);
+    getRepositoryInfo()
+      .then((repo) => {
+        const isLiked = favoritesStore.hasFavorite(Number(id));
 
-  function updateIsLike() {
+        setRepository({
+          ...repo,
+          is_liked: isLiked,
+        });
+        setIsLiked(isLiked);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [id, getRepositoryInfo]);
+
+  function onToggleFavorite() {
     if (!repository) return;
 
     favoritesStore.toggleFavorite(repository);
-    repository.is_liked = !isLike;
-    setIsLike((prev) => !prev);
+    repository.is_liked = !isLiked;
+    setIsLiked((prev) => !prev);
   }
 
   return (
     <div className="general">
-      {repository && (
-        <div className="profile-card">
-          <p className="profile">Профиль</p>
-          <TitleCard
-            full_name={repository.full_name}
-            avatar_url={repository.owner.avatar_url}
-            description={repository.description}
-          />
-          <ListInfo {...repository} />
-          <div className="divider" />
-          <Buttons
-            html_url={repository.html_url}
-            isLike={isLike}
-            updateIsLike={updateIsLike}
-          />
-        </div>
-      )}
+      <RepositoryCard
+        repository={repository}
+        onToggleFavorite={onToggleFavorite}
+      />
     </div>
   );
 });

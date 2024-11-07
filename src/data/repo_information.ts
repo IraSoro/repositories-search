@@ -18,5 +18,8 @@ export interface RepoInformation {
   forks: number;
   archived: boolean;
   language: string;
-  is_liked: boolean;
 }
+
+export type RepoInformationEnriched = RepoInformation & {
+  is_liked: boolean;
+};
