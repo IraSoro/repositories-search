@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import RepoInfo from "../states/repo_info";
-import { SortOption } from "../states/sort_options";
+import { RepoInformation } from "../data/repo_information";
+import { SortOption } from "../data/sort_option";
 
 class RepositoriesStore {
-  repositories: RepoInfo[] = [];
+  repositories: RepoInformation[] = [];
   totalCount = 0;
 
   selectedValue = SortOption.Stars;
@@ -34,7 +34,7 @@ class RepositoriesStore {
         return response.json();
       })
       .then((data) => {
-        const updatedItems = (data.items as RepoInfo[]).map((item) => ({
+        const updatedItems = (data.items as RepoInformation[]).map((item) => ({
           ...item,
           isLike: false,
         }));
@@ -81,7 +81,7 @@ class RepositoriesStore {
     this.fetchGetRepositories();
   };
 
-  findRepositoryById(id: number): RepoInfo | undefined {
+  findRepositoryById(id: number): RepoInformation | undefined {
     return this.repositories.find((repo) => repo.id === id);
   }
 }

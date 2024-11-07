@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { observer } from "mobx-react";
 import favoritesStore from "../store/favorites_store";
 
-import RepoInfo from "../states/repo_info";
+import { RepoInformation } from "../data/repo_information";
 
 import "./RepositoryPage.css";
 
@@ -153,7 +153,7 @@ const Buttons = (props: ButtonsProps) => {
 
 const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
-  const [repository, setRepository] = useState<RepoInfo | null>(null);
+  const [repository, setRepository] = useState<RepoInformation | null>(null);
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
@@ -175,7 +175,7 @@ const RepositoryPage = observer(() => {
       })
       .then((data) => {
         setRepository({
-          ...(data as RepoInfo),
+          ...(data as RepoInformation),
           is_liked: favoritesStore.hasFavorite(Number(id)),
         });
       })

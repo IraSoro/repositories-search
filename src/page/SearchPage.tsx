@@ -9,7 +9,7 @@ import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
 
 import "./SearchPage.css";
-import { SortOption } from "../states/sort_options";
+import { SortOption } from "../data/sort_option";
 
 interface SearchInput {
   value: string;

@@ -1,11 +1,24 @@
 import { makeAutoObservable } from "mobx";
 
-import { SortOption } from "../states/sort_options";
-import RepoInfo from "../states/repo_info";
-import ShortRepoInfo from "../states/short_repo_info";
+import { SortOption } from "../data/sort_option";
+import { RepoInformation } from "../data/repo_information";
+
+interface FavoriteRepoInformation {
+  id: number;
+  full_name: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+  html_url: string;
+  stargazers_count: number;
+  forks_count: number;
+  is_liked: boolean;
+  updated_at: string;
+}
 
 class FavoritesStore {
-  favorites: ShortRepoInfo[] = [];
+  favorites: FavoriteRepoInformation[];
 
   constructor() {
     const savedFavorites = localStorage.getItem("favorites");
@@ -22,21 +35,21 @@ class FavoritesStore {
     return this.favorites.some((favItem) => favItem.id === id);
   }
 
-  addFavorite(item: RepoInfo) {
+  addFavorite(item: RepoInformation) {
     item.is_liked = true;
-    this.favorites.push(item as ShortRepoInfo);
+    this.favorites.push(item as FavoriteRepoInformation);
     this.sort(SortOption.Stars);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
 
-  removeFavorite(item: RepoInfo) {
+  removeFavorite(item: RepoInformation) {
     this.favorites = this.favorites.filter(
       (favItem) => favItem.id !== item.id
     );
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
 
-  toggleFavorite(item: RepoInfo) {
+  toggleFavorite(item: RepoInformation) {
     if (item.is_liked) {
       this.removeFavorite(item);
       return;

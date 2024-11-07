@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { observer } from "mobx-react";
-import RepoInfo from "../states/repo_info";
+import { RepoInformation } from "../data/repo_information";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
-import { SortOption } from "../states/sort_options";
+import { SortOption } from "../data/sort_option";
 
 import favoritesStore from "../store/favorites_store";
 
@@ -43,7 +43,7 @@ const FavoritesPage = observer(() => {
           selectedValue={selectedValue}
           updateSelect={updateSelect}
         />
-        <ItemsList items={favoritesStore.favorites as RepoInfo[]} />
+        <ItemsList items={favoritesStore.favorites as RepoInformation[]} />
       </div>
     </div>
   );

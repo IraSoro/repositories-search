@@ -1,4 +1,4 @@
-interface RepoInfo {
+export interface RepoInformation {
   id: number;
   name: string;
   full_name: string;
@@ -20,5 +20,3 @@ interface RepoInfo {
   language: string;
   is_liked: boolean;
 }
-
-export default RepoInfo;

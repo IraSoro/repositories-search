@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { observer } from "mobx-react";
 import favoritesStore from "../store/favorites_store";
 
-import RepoInfo from "../states/repo_info";
+import { RepoInformation } from "../data/repo_information";
 import "./ItemsList.css";
 
 interface ButtonsProps {
@@ -98,7 +98,7 @@ const CardHeader = (props: CardHeaderProps) => {
 };
 
 interface ItemProps {
-  item: RepoInfo;
+  item: RepoInformation;
 }
 
 const Item = observer(({ item }: ItemProps) => {
@@ -139,7 +139,7 @@ const Item = observer(({ item }: ItemProps) => {
 });
 
 interface ItemsListProps {
-  items: RepoInfo[];
+  items: RepoInformation[];
 }
 
 const ItemsList = ({ items }: ItemsListProps) => {
