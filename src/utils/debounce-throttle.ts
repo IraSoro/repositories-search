@@ -5,7 +5,7 @@ export function debounce(func: Function, delay: number) {
   return function (...args: unknown[]) {
     clearTimeout(timeoutId);
     timeoutId = window.setTimeout(() => {
-      func(args);
+      func(...args);
     }, delay);
   };
 }
@@ -19,7 +19,7 @@ export function throttle(func: Function, delay: number) {
 
     if (now - lastCallDate >= delay) {
       lastCallDate = now;
-      func(args);
+      func(...args);
     }
   };
 }

@@ -54,6 +54,7 @@ class RepositoriesStore {
 
   addPage() {
     this.page = this.page + 1;
+    this.fetchGetRepositories();
   }
 
   resetValues() {
@@ -71,11 +72,13 @@ class RepositoriesStore {
     }
     this.inputValue = newValue;
     this.page = 1;
+    this.fetchGetRepositories();
   }
 
   updateSelect = (newValue: string) => {
     this.selectedValue = newValue;
     this.page = 1;
+    this.fetchGetRepositories();
   };
 
   findRepositoryById(id: number): RepoInfo | undefined {

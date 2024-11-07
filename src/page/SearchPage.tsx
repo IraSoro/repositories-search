@@ -36,12 +36,8 @@ const SearchInput = (props: SearchInput) => {
 };
 
 const SearchPage = observer(() => {
-  const { repositories, page, selectedValue, inputValue, totalCount } =
+  const { repositories, selectedValue, inputValue, totalCount } =
     repositoriesStore;
-
-  useEffect(() => {
-    repositoriesStore.fetchGetRepositories();
-  }, [inputValue, page, selectedValue]);
 
   useEffect(() => {
     const scroll = () => {
