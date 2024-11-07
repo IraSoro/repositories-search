@@ -1,4 +1,6 @@
 import { makeAutoObservable } from "mobx";
+
+import sortOptions from "../states/sortOptions";
 import RepoInfo from "../states/RepoInfo";
 
 class FavoritesStore {
@@ -7,6 +9,7 @@ class FavoritesStore {
   constructor() {
     const savedFavorites = localStorage.getItem("favorites");
     this.favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+    this.sort(sortOptions[0]);
     makeAutoObservable(this);
   }
 
@@ -21,6 +24,7 @@ class FavoritesStore {
   addFavorite(item: RepoInfo) {
     item.isLike = true;
     this.favorites.push(item);
+    this.sort(sortOptions[0]);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
 
