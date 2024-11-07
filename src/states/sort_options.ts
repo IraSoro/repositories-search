@@ -1,3 +1,5 @@
-const sortOptions = ["stars", "forks", "updated"];
-
-export default sortOptions;
+export enum SortOption {
+  Stars = "stars",
+  Forks = "forks",
+  LastUpdate = "updated",
+}

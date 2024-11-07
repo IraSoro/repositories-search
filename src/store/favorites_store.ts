@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-import sortOptions from "../states/sort_options";
+import { SortOption } from "../states/sort_options";
 import RepoInfo from "../states/repo_info";
 import ShortRepoInfo from "../states/short_repo_info";
 
@@ -10,7 +10,7 @@ class FavoritesStore {
   constructor() {
     const savedFavorites = localStorage.getItem("favorites");
     this.favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-    this.sort(sortOptions[0]);
+    this.sort(SortOption.Stars);
     makeAutoObservable(this);
   }
 
@@ -25,39 +25,39 @@ class FavoritesStore {
   addFavorite(item: RepoInfo) {
     item.is_liked = true;
     this.favorites.push(item as ShortRepoInfo);
-    this.sort(sortOptions[0]);
+    this.sort(SortOption.Stars);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
 
   removeFavorite(item: RepoInfo) {
-    this.favorites = this.favorites.filter((favItem) => favItem.id !== item.id);
+    this.favorites = this.favorites.filter(
+      (favItem) => favItem.id !== item.id
+    );
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
 
   toggleFavorite(item: RepoInfo) {
     if (item.is_liked) {
       this.removeFavorite(item);
-    } else {
-      this.addFavorite(item);
+      return;
     }
+    this.addFavorite(item);
   }
 
-  sort(option: string) {
+  sort(option: SortOption) {
     switch (option) {
-      case "stars":
+      case SortOption.Stars:
         this.favorites.sort((a, b) => b.stargazers_count - a.stargazers_count);
-        break;
-      case "forks":
+        return;
+      case SortOption.Forks:
         this.favorites.sort((a, b) => b.forks_count - a.forks_count);
-        break;
-      case "updated":
+        return;
+      case SortOption.LastUpdate:
         this.favorites.sort(
           (a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
         );
-        break;
-      default:
-        break;
+        return;
     }
   }
 }

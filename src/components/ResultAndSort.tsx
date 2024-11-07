@@ -1,10 +1,10 @@
-import sortOptions from "../states/sort_options";
+import { SortOption } from "../states/sort_options";
 import "./ResultAndSort.css";
 
 interface ResultAndSortProps {
   title: string;
   selectedValue: string;
-  updateSelect: (newValue: string) => void;
+  updateSelect: (newValue: SortOption) => void;
 }
 
 const ResultAndSort = (props: ResultAndSortProps) => {
@@ -16,12 +16,12 @@ const ResultAndSort = (props: ResultAndSortProps) => {
           className="sort-select"
           value={props.selectedValue}
           onChange={(event) => {
-            props.updateSelect(event.target.value);
+            props.updateSelect(event.target.value as SortOption);
           }}
         >
-          <option value={sortOptions[0]}>Stars</option>
-          <option value={sortOptions[1]}>Forks</option>
-          <option value={sortOptions[2]}>Updated</option>
+          <option value={SortOption.Stars}>Stars</option>
+          <option value={SortOption.Forks}>Forks</option>
+          <option value={SortOption.LastUpdate}>Last Update</option>
         </select>
       </div>
     </div>

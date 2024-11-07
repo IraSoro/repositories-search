@@ -6,7 +6,7 @@ import RepoInfo from "../states/repo_info";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
-import sortOptions from "../states/sort_options";
+import { SortOption } from "../states/sort_options";
 
 import favoritesStore from "../store/favorites_store";
 
@@ -28,8 +28,8 @@ const BackButton = () => {
 };
 
 const FavoritesPage = observer(() => {
-  const [selectedValue, setSelectedValue] = useState(sortOptions[0]);
-  const updateSelect = (newValue: string) => {
+  const [selectedValue, setSelectedValue] = useState(SortOption.Stars);
+  const updateSelect = (newValue: SortOption) => {
     setSelectedValue(newValue);
     favoritesStore.sort(newValue);
   };

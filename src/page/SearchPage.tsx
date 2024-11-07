@@ -9,6 +9,7 @@ import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
 
 import "./SearchPage.css";
+import { SortOption } from "../states/sort_options";
 
 interface SearchInput {
   value: string;
@@ -61,7 +62,7 @@ const SearchPage = observer(() => {
     repositoriesStore.updateInput(newValue);
   };
 
-  const updateSelect = (newValue: string) => {
+  const updateSelect = (newValue: SortOption) => {
     repositoriesStore.updateSelect(newValue);
   };
 

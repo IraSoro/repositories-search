@@ -1,12 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import RepoInfo from "../states/repo_info";
-import sortOptions from "../states/sort_options";
+import { SortOption } from "../states/sort_options";
 
 class RepositoriesStore {
   repositories: RepoInfo[] = [];
   totalCount = 0;
 
-  selectedValue = sortOptions[0];
+  selectedValue = SortOption.Stars;
   inputValue = "";
   repPage = 12;
   page = 1;
@@ -61,7 +61,7 @@ class RepositoriesStore {
     this.page = 1;
     this.totalCount = 0;
     this.repositories = [];
-    this.selectedValue = sortOptions[0];
+    this.selectedValue = SortOption.Stars;
     this.inputValue = "";
   }
 
@@ -75,7 +75,7 @@ class RepositoriesStore {
     this.fetchGetRepositories();
   }
 
-  updateSelect = (newValue: string) => {
+  updateSelect = (newValue: SortOption) => {
     this.selectedValue = newValue;
     this.page = 1;
     this.fetchGetRepositories();
