@@ -67,7 +67,7 @@ const NameContent = (props: NameContentProps) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {props.full_name}
+        {props.full_name.substring(0, 25)}
       </a>
     </div>
   );
