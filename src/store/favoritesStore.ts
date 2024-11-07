@@ -55,6 +55,10 @@ class FavoritesStore {
         break;
     }
   }
+
+  findRepositoryById(id: number): RepoInfo | undefined {
+    return this.favorites.find((repo) => repo.id === id);
+  }
 }
 
 const favoritesStore = new FavoritesStore();

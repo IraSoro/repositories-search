@@ -161,7 +161,10 @@ const RepositoryPage = observer(() => {
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    setRepository(repositoriesStore.findRepositoryById(Number(id)));
+    setRepository(
+      favoritesStore.findRepositoryById(Number(id)) ||
+        repositoriesStore.findRepositoryById(Number(id))
+    );
   }, [id]);
 
   useEffect(() => {
