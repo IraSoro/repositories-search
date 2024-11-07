@@ -56,17 +56,24 @@ class RepositoriesStore {
 
   resetValues() {
     this.page = 1;
-    this.fetchGetRepositories();
+    this.totalCount = 0;
+    this.repositories = [];
+    this.selectedValue = "none";
+    this.inputValue = "";
   }
 
   updateInput(newValue: string) {
-    repositoriesStore.inputValue = newValue;
-    this.resetValues();
+    if (newValue === "") {
+      this.resetValues();
+      return;
+    }
+    this.inputValue = newValue;
+    this.page = 1;
   }
 
   updateSelect = (newValue: string) => {
-    repositoriesStore.selectedValue = newValue;
-    this.resetValues();
+    this.selectedValue = newValue;
+    this.page = 1;
   };
 
   findRepositoryById(id: number): RepoInfo | undefined {
