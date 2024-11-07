@@ -112,6 +112,7 @@ const Item = observer(({ item }: ItemProps) => {
 
   function updateIsLike() {
     favoritesStore.toggleFavorite(item);
+    item.isLike = !isLike;
     setIsLike((prev) => !prev);
   }
 

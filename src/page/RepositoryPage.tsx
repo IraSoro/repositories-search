@@ -173,6 +173,7 @@ const RepositoryPage = observer(() => {
     if (!repository) return;
 
     favoritesStore.toggleFavorite(repository);
+    repository.isLike = !isLike;
     setIsLike((prev) => !prev);
   }
 
