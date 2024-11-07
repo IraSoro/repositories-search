@@ -18,7 +18,7 @@ interface RepoInfo {
   forks: number;
   archived: boolean;
   language: string;
-  isLike: boolean;
+  is_liked: boolean;
 }
 
 export default RepoInfo;

@@ -2,9 +2,10 @@ import { makeAutoObservable } from "mobx";
 
 import sortOptions from "../states/sortOptions";
 import RepoInfo from "../states/RepoInfo";
+import ShortRepoInfo from "../states/ShortRepoInfo";
 
 class FavoritesStore {
-  favorites: RepoInfo[] = [];
+  favorites: ShortRepoInfo[] = [];
 
   constructor() {
     const savedFavorites = localStorage.getItem("favorites");
@@ -22,8 +23,8 @@ class FavoritesStore {
   }
 
   addFavorite(item: RepoInfo) {
-    item.isLike = true;
-    this.favorites.push(item);
+    item.is_liked = true;
+    this.favorites.push(item as ShortRepoInfo);
     this.sort(sortOptions[0]);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
   }
@@ -34,7 +35,7 @@ class FavoritesStore {
   }
 
   toggleFavorite(item: RepoInfo) {
-    if (item.isLike) {
+    if (item.is_liked) {
       this.removeFavorite(item);
     } else {
       this.addFavorite(item);
@@ -58,10 +59,6 @@ class FavoritesStore {
       default:
         break;
     }
-  }
-
-  findRepositoryById(id: number): RepoInfo | undefined {
-    return this.favorites.find((repo) => repo.id === id);
   }
 }
 

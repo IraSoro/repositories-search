@@ -106,13 +106,13 @@ const Item = observer(({ item }: ItemProps) => {
 
   useEffect(() => {
     const newIsLike = favoritesStore.hasFavorite(item.id);
-    item.isLike = newIsLike;
+    item.is_liked = newIsLike;
     setIsLike(newIsLike);
   }, [item]);
 
   function updateIsLike() {
     favoritesStore.toggleFavorite(item);
-    item.isLike = !isLike;
+    item.is_liked = !isLike;
     setIsLike((prev) => !prev);
   }
 

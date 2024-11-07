@@ -176,7 +176,7 @@ const RepositoryPage = observer(() => {
       .then((data) => {
         setRepository({
           ...(data as RepoInfo),
-          isLike: favoritesStore.hasFavorite(Number(id)),
+          is_liked: favoritesStore.hasFavorite(Number(id)),
         });
       })
       .catch((error) => {
@@ -186,14 +186,14 @@ const RepositoryPage = observer(() => {
 
   useEffect(() => {
     if (!repository) return;
-    setIsLike(repository.isLike);
+    setIsLike(repository.is_liked);
   }, [repository]);
 
   function updateIsLike() {
     if (!repository) return;
 
     favoritesStore.toggleFavorite(repository);
-    repository.isLike = !isLike;
+    repository.is_liked = !isLike;
     setIsLike((prev) => !prev);
   }
 
