@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import RepoInfo from "../states/RepoInfo";
-import ResultAndSort from "../components/ResultAndSort";
-import ItemsList from "../components/ItemsList";
+import { observer } from "mobx-react";
+import repositoriesStore from "../store/repositoriesStore";
 
 import { debounce, throttle } from "../utils/utils";
+
+import ResultAndSort from "../components/ResultAndSort";
+import ItemsList from "../components/ItemsList";
 
 import "./SearchPage.css";
 
@@ -33,47 +35,12 @@ const SearchInput = (props: SearchInput) => {
   );
 };
 
-const SearchPage = () => {
-  const [repos, setRepos] = useState<RepoInfo[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [selectedValue, setSelectedValue] = useState("none");
-  const [inputValue, setInputValue] = useState("");
-  const [page, setPage] = useState(1);
+const SearchPage = observer(() => {
+  const { repositories, page, selectedValue, inputValue, totalCount } =
+    repositoriesStore;
 
   useEffect(() => {
-    // fetch
-    const headersList = {
-      Accept: "application/vnd.github+json",
-    };
-
-    const url = `https://api.github.com/search/repositories?q=${inputValue}&per_page=12&page=${page}&sort=${selectedValue}`;
-
-    fetch(url, {
-      method: "GET",
-      headers: headersList,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const updatedItems = (data.items as RepoInfo[]).map((item) => ({
-          ...item,
-          isLike: false,
-        }));
-
-        if (page === 1) {
-          setTotalCount(data.total_count);
-          setRepos(updatedItems);
-        } else {
-          setRepos((prevRepos) => [...prevRepos, ...updatedItems]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    repositoriesStore.fetchGetRepositories();
   }, [inputValue, page, selectedValue]);
 
   useEffect(() => {
@@ -96,7 +63,8 @@ const SearchPage = () => {
       if (!isCheckPosition()) {
         return;
       }
-      setPage((prevPage) => prevPage + 1);
+
+      repositoriesStore.addPage();
     }, 500);
     window.addEventListener("scroll", throttledScroll);
 
@@ -106,13 +74,11 @@ const SearchPage = () => {
   }, []);
 
   const updateInput = (newValue: string) => {
-    setInputValue(newValue);
-    setPage(1);
+    repositoriesStore.updateInput(newValue);
   };
 
   const updateSelect = (newValue: string) => {
-    setSelectedValue(newValue);
-    setPage(1);
+    repositoriesStore.updateSelect(newValue);
   };
 
   return (
@@ -123,9 +89,9 @@ const SearchPage = () => {
         selectedValue={selectedValue}
         updateSelect={updateSelect}
       />
-      <ItemsList items={repos} />
+      <ItemsList items={repositories} />
     </div>
   );
-};
+});
 
 export default SearchPage;
