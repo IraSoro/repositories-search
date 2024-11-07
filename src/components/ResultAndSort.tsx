@@ -4,7 +4,7 @@ import "./ResultAndSort.css";
 interface ResultAndSortProps {
   title: string;
   selectedValue: string;
-  updateSelect: (newValue: SortOption) => void;
+  onUpdateSortOption: (newValue: SortOption) => void;
 }
 
 const ResultAndSort = (props: ResultAndSortProps) => {
@@ -16,7 +16,7 @@ const ResultAndSort = (props: ResultAndSortProps) => {
           className="sort-select"
           value={props.selectedValue}
           onChange={(event) => {
-            props.updateSelect(event.target.value as SortOption);
+            props.onUpdateSortOption(event.target.value as SortOption);
           }}
         >
           <option value={SortOption.Stars}>Stars</option>

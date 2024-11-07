@@ -72,7 +72,7 @@ const SearchPage = observer(() => {
       <ResultAndSort
         title={`Result: ${totalCount} repositories`}
         selectedValue={selectedValue}
-        updateSelect={updateSelect}
+        onUpdateSortOption={updateSelect}
       />
       <ItemsList items={repositories} />
     </div>
