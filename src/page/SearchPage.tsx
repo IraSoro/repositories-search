@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import repositoriesStore from "../store/repositoriesStore";
 
-import { debounce } from "../utils/utils";
+import { debounce } from "../utils/debounce-throttle";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
