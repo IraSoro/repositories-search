@@ -17,6 +17,7 @@ class RepositoriesStore {
   async fetchGetRepositories() {
     const headersList = {
       Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN as string}`,
     };
 
     const url = `https://api.github.com/search/repositories?q=${this.inputValue}&per_page=${this.repPage}&page=${this.page}&sort=${this.selectedValue}`;
