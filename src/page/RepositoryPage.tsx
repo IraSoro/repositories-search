@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { observer } from "mobx-react";
 
 import favoritesStore from "../store/favorites_store";
-import { RepoInformation, RepoInformationEnriched } from "../data/repo_information";
+import {
+  RepoInformation,
+  RepoInformationEnriched,
+} from "../data/repo_information";
 
 import "./RepositoryPage.css";
 
@@ -173,8 +176,9 @@ const RepositoryCard = (props: RepositoryCardProps) => {
 
 const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
-  const [repository, setRepository] = useState<RepoInformationEnriched | null>(null);
-  const [isLiked, setIsLiked] = useState(false);
+  const [repository, setRepository] = useState<RepoInformationEnriched | null>(
+    null
+  );
 
   const getRepositoryInfo = useCallback(async () => {
     const resp = await fetch(`https://api.github.com/repositories/${id}`, {
@@ -185,35 +189,40 @@ const RepositoryPage = observer(() => {
     });
 
     if (resp.status !== 200) {
-      throw new Error(`Github returned non-200 status code[${resp.status}]: ${await resp.json()}`);
+      throw new Error(
+        `Github returned non-200 status code[${
+          resp.status
+        }]: ${await resp.json()}`
+      );
     }
 
-    return await resp.json() as RepoInformation;
+    return (await resp.json()) as RepoInformation;
   }, [id]);
 
   useEffect(() => {
     getRepositoryInfo()
       .then((repo) => {
-        const isLiked = favoritesStore.hasFavorite(Number(id));
-
         setRepository({
           ...repo,
-          is_liked: isLiked,
+          is_liked: favoritesStore.hasFavorite(Number(id)),
         });
-        setIsLiked(isLiked);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [id, getRepositoryInfo]);
 
-  function onToggleFavorite() {
-    if (!repository) return;
+  const onToggleFavorite = useCallback(() => {
+    if (!repository) {
+      return;
+    }
 
     favoritesStore.toggleFavorite(repository);
-    repository.is_liked = !isLiked;
-    setIsLiked((prev) => !prev);
-  }
+    setRepository({
+      ...repository,
+      is_liked: favoritesStore.hasFavorite(Number(repository.id)),
+    });
+  }, [repository]);
 
   return (
     <div className="general">
