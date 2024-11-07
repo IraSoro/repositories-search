@@ -1,11 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import RepoInfo from "../states/RepoInfo";
+import sortOptions from "../states/sortOptions";
 
 class RepositoriesStore {
   repositories: RepoInfo[] = [];
   totalCount = 0;
 
-  selectedValue = "none";
+  selectedValue = sortOptions[0];
   inputValue = "";
   repPage = 12;
   page = 1;
@@ -59,7 +60,7 @@ class RepositoriesStore {
     this.page = 1;
     this.totalCount = 0;
     this.repositories = [];
-    this.selectedValue = "none";
+    this.selectedValue = sortOptions[0];
     this.inputValue = "";
   }
 

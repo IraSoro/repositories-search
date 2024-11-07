@@ -6,6 +6,7 @@ import favoritesStore from "../store/favoritesStore";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
+import sortOptions from "../states/sortOptions";
 
 import "./FavoritesPage.css";
 
@@ -25,7 +26,7 @@ const BackButton = () => {
 };
 
 const FavoritesPage = observer(() => {
-  const [selectedValue, setSelectedValue] = useState("none");
+  const [selectedValue, setSelectedValue] = useState(sortOptions[0]);
   const updateSelect = (newValue: string) => {
     setSelectedValue(newValue);
     favoritesStore.sort(newValue);
