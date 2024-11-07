@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import RepoInfo from "../states/RepoInfo";
-import sortOptions from "../states/sortOptions";
+import RepoInfo from "../states/repo_info";
+import sortOptions from "../states/sort_options";
 
 class RepositoriesStore {
   repositories: RepoInfo[] = [];

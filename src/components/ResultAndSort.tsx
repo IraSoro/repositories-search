@@ -1,4 +1,4 @@
-import sortOptions from "../states/sortOptions";
+import sortOptions from "../states/sort_options";
 import "./ResultAndSort.css";
 
 interface ResultAndSortProps {

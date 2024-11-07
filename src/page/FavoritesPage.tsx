@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { observer } from "mobx-react";
-import RepoInfo from "../states/RepoInfo";
+import RepoInfo from "../states/repo_info";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
-import sortOptions from "../states/sortOptions";
+import sortOptions from "../states/sort_options";
 
-import favoritesStore from "../store/favoritesStore";
+import favoritesStore from "../store/favorites_store";
 
 import "./FavoritesPage.css";
 

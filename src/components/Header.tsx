@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { observer } from "mobx-react";
-import favoritesStore from "../store/favoritesStore";
+import favoritesStore from "../store/favorites_store";
 
 import "./Header.css";
 

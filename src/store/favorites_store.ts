@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx";
 
-import sortOptions from "../states/sortOptions";
-import RepoInfo from "../states/RepoInfo";
-import ShortRepoInfo from "../states/ShortRepoInfo";
+import sortOptions from "../states/sort_options";
+import RepoInfo from "../states/repo_info";
+import ShortRepoInfo from "../states/short_repo_info";
 
 class FavoritesStore {
   favorites: ShortRepoInfo[] = [];

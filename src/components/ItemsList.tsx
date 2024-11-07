@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { observer } from "mobx-react";
-import favoritesStore from "../store/favoritesStore";
+import favoritesStore from "../store/favorites_store";
 
-import RepoInfo from "../states/RepoInfo";
+import RepoInfo from "../states/repo_info";
 import "./ItemsList.css";
 
 interface ButtonsProps {

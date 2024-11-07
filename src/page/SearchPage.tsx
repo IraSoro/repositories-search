@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
 import { observer } from "mobx-react";
-import repositoriesStore from "../store/repositoriesStore";
+import repositoriesStore from "../store/repositories_store";
 
-import { debounce } from "../utils/debounce-throttle";
+import { debounce } from "../utils/debounce_throttle";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
