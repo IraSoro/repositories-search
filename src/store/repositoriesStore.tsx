@@ -68,6 +68,10 @@ class RepositoriesStore {
     repositoriesStore.selectedValue = newValue;
     this.resetValues();
   };
+
+  findRepositoryById(id: number): RepoInfo | undefined {
+    return this.repositories.find((repo) => repo.id === id);
+  }
 }
 
 const repositoriesStore = new RepositoriesStore();

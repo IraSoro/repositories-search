@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 
 import { observer } from "mobx-react";
 import favoritesStore from "../store/favoritesStore";
+import repositoriesStore from "../store/repositoriesStore";
 
 import RepoInfo from "../states/RepoInfo";
+import defaultRepoInfo from "../states/defaultRepoInfo";
 
 import "./RepositoryPage.css";
 
@@ -109,18 +111,18 @@ interface ButtonsProps {
   updateIsLike: () => void;
 }
 
-const Buttons = (props: ButtonsProps) => {
-  const copyText = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        console.log("Text has been copy");
-      })
-      .catch((err) => {
-        console.error("Copy error:", err);
-      });
-  };
+const copyText = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      console.log("Text has been copy");
+    })
+    .catch((err) => {
+      console.error("Copy error:", err);
+    });
+};
 
+const Buttons = (props: ButtonsProps) => {
   return (
     <div className="card-buttons">
       <div className="card-btn-icons">
@@ -153,44 +155,19 @@ const Buttons = (props: ButtonsProps) => {
 
 const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
-  const [repository, setRepository] = useState<RepoInfo | null>(null);
+  const [repository, setRepository] = useState<RepoInfo | undefined>(
+    defaultRepoInfo
+  );
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    const headersList = {
-      Accept: "application/vnd.github+json",
-    };
-
-    const url = `https://api.github.com/repositories/${id}`;
-
-    fetch(url, {
-      method: "GET",
-      headers: headersList,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRepository({
-          ...(data as RepoInfo),
-          isLike: false,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    setRepository(repositoriesStore.findRepositoryById(Number(id)));
   }, [id]);
 
   useEffect(() => {
     if (!repository) return;
-
-    const newIsLike = favoritesStore.hasFavorite(Number(id));
-    repository.isLike = newIsLike;
-    setIsLike(newIsLike);
-  }, [id, repository]);
+    setIsLike(repository.isLike);
+  }, [repository]);
 
   function updateIsLike() {
     if (!repository) return;
