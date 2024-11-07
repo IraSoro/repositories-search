@@ -3,10 +3,8 @@ import { useParams } from "react-router-dom";
 
 import { observer } from "mobx-react";
 import favoritesStore from "../store/favoritesStore";
-import repositoriesStore from "../store/repositoriesStore";
 
 import RepoInfo from "../states/RepoInfo";
-import defaultRepoInfo from "../states/defaultRepoInfo";
 
 import "./RepositoryPage.css";
 
@@ -155,16 +153,35 @@ const Buttons = (props: ButtonsProps) => {
 
 const RepositoryPage = observer(() => {
   const { id } = useParams<string>();
-  const [repository, setRepository] = useState<RepoInfo | undefined>(
-    defaultRepoInfo
-  );
+  const [repository, setRepository] = useState<RepoInfo | null>(null);
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    setRepository(
-      favoritesStore.findRepositoryById(Number(id)) ||
-        repositoriesStore.findRepositoryById(Number(id))
-    );
+    const headersList = {
+      Accept: "application/vnd.github+json",
+    };
+
+    const url = `https://api.github.com/repositories/${id}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: headersList,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRepository({
+          ...(data as RepoInfo),
+          isLike: favoritesStore.hasFavorite(Number(id)),
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }, [id]);
 
   useEffect(() => {
