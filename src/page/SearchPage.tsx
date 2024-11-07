@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import repositoriesStore from "../store/repositoriesStore";
 
-import { debounce, throttle } from "../utils/utils";
+import { debounce } from "../utils/utils";
 
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
@@ -44,32 +44,20 @@ const SearchPage = observer(() => {
   }, [inputValue, page, selectedValue]);
 
   useEffect(() => {
-    // scroll
-    const isCheckPosition = () => {
-      const height = document.body.offsetHeight;
-      const screenHeight = window.innerHeight;
-      const scrolled = window.scrollY;
+    const scroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
 
-      const threshold = height - screenHeight / 4;
-      const position = scrolled + screenHeight;
-
-      if (position >= threshold) {
-        return true;
+      if (Math.round(scrollTop + clientHeight) >= scrollHeight) {
+        repositoriesStore.addPage();
       }
-      return false;
     };
 
-    const throttledScroll = throttle(() => {
-      if (!isCheckPosition()) {
-        return;
-      }
+    const scrollDebounced = debounce(scroll, 100);
 
-      repositoriesStore.addPage();
-    }, 500);
-    window.addEventListener("scroll", throttledScroll);
-
+    window.addEventListener("scroll", scrollDebounced);
     return () => {
-      window.removeEventListener("scroll", throttledScroll);
+      window.removeEventListener("scroll", scrollDebounced);
     };
   }, []);
 
