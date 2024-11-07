@@ -36,6 +36,25 @@ class FavoritesStore {
       this.addFavorite(item);
     }
   }
+
+  sort(option: string) {
+    switch (option) {
+      case "stars":
+        this.favorites.sort((a, b) => b.stargazers_count - a.stargazers_count);
+        break;
+      case "forks":
+        this.favorites.sort((a, b) => b.forks_count - a.forks_count);
+        break;
+      case "updated":
+        this.favorites.sort(
+          (a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        );
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 const favoritesStore = new FavoritesStore();

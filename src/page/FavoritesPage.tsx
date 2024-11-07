@@ -28,6 +28,7 @@ const FavoritesPage = observer(() => {
   const [selectedValue, setSelectedValue] = useState("none");
   const updateSelect = (newValue: string) => {
     setSelectedValue(newValue);
+    favoritesStore.sort(newValue);
   };
 
   return (
