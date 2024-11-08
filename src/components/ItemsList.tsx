@@ -1,30 +1,23 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { observer } from "mobx-react";
 import favoritesStore from "../store/favorites_store";
 
-import { RepoInformation } from "../data/repo_information";
+import { RepoInformationEnriched } from "../data/repo_information";
 import "./ItemsList.css";
 
 interface ButtonsProps {
   id: number;
   html_url: string;
   isLike: boolean;
-  updateIsLike: () => void;
+  onToggleFavorite: () => void;
 }
 
 const Buttons = (props: ButtonsProps) => {
-  const copyText = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        console.log("Text has been copy");
-      })
-      .catch((err) => {
-        console.error("Copy error:", err);
-      });
-  };
+  const handleCopyText = useCallback(async (text: string) => {
+    await navigator.clipboard.writeText(text);
+  }, []);
 
   return (
     <div className="buttons">
@@ -35,13 +28,13 @@ const Buttons = (props: ButtonsProps) => {
           }
           alt=""
           className="like-icon"
-          onClick={props.updateIsLike}
+          onClick={props.onToggleFavorite}
         />
         <img
           src="icons/link 1.svg"
           alt=""
           className="copy-icon"
-          onClick={() => copyText(props.html_url)}
+          onClick={() => handleCopyText(props.html_url)}
         />
       </div>
       <Link to={`/repository/${props.id}`} style={{ textDecoration: "none" }}>
@@ -98,23 +91,23 @@ const CardHeader = (props: CardHeaderProps) => {
 };
 
 interface ItemProps {
-  item: RepoInformation;
+  item: RepoInformationEnriched;
 }
 
 const Item = observer(({ item }: ItemProps) => {
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    const newIsLike = favoritesStore.hasFavorite(item.id);
-    item.is_liked = newIsLike;
-    setIsLike(newIsLike);
+    const isLiked = favoritesStore.hasFavorite(item.id);
+    item.is_liked = isLiked;
+    setIsLike(isLiked);
   }, [item]);
 
-  function updateIsLike() {
+  const handleToggleFavorite = useCallback(() => {
     favoritesStore.toggleFavorite(item);
     item.is_liked = !isLike;
     setIsLike((prev) => !prev);
-  }
+  }, [item, isLike, setIsLike]);
 
   return (
     <div className="card">
@@ -132,14 +125,14 @@ const Item = observer(({ item }: ItemProps) => {
         id={item.id}
         html_url={item.html_url}
         isLike={isLike}
-        updateIsLike={updateIsLike}
+        onToggleFavorite={handleToggleFavorite}
       />
     </div>
   );
 });
 
 interface ItemsListProps {
-  items: RepoInformation[];
+  items: RepoInformationEnriched[];
 }
 
 const ItemsList = ({ items }: ItemsListProps) => {

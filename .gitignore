@@ -24,6 +24,4 @@ dist-ssr
 *.sw?
 
 # my
-/src/components/TestItem.tsx
-/src/assets/ResponseExample.json
 .env
