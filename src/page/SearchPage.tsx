@@ -1,27 +1,19 @@
-import { useEffect } from "react";
-
+import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
+
 import repositoriesStore from "../store/repositories_store";
-
-import { debounce } from "../utils/debounce_throttle";
-
 import ResultAndSort from "../components/ResultAndSort";
 import ItemsList from "../components/ItemsList";
+import { debounce } from "../utils/debounce_throttle";
 
 import "./SearchPage.css";
-import { SortOption } from "../data/sort_option";
 
 interface SearchInput {
   value: string;
-  updateValue: (newValue: string) => void;
+  onInputUpdate: (newValue: string) => void;
 }
 
 const SearchInput = (props: SearchInput) => {
-  function changeInput(newValue: string) {
-    props.updateValue(newValue);
-  }
-  const debounceInput = debounce(changeInput, 500);
-
   return (
     <div className="search-outside">
       <input
@@ -29,7 +21,7 @@ const SearchInput = (props: SearchInput) => {
         className="search-input"
         placeholder="Search"
         onChange={(e) => {
-          debounceInput(e.target.value);
+          props.onInputUpdate(e.target.value);
         }}
       />
     </div>
@@ -40,39 +32,36 @@ const SearchPage = observer(() => {
   const { repositories, selectedValue, inputValue, totalCount } =
     repositoriesStore;
 
-  useEffect(() => {
-    const scroll = () => {
-      const { scrollTop, clientHeight, scrollHeight } =
-        document.documentElement;
+  const handleScroll = useCallback(() => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
-      if (Math.round(scrollTop + clientHeight) >= scrollHeight) {
-        repositoriesStore.addPage();
-      }
-    };
-
-    const scrollDebounced = debounce(scroll, 100);
-
-    window.addEventListener("scroll", scrollDebounced);
-    return () => {
-      window.removeEventListener("scroll", scrollDebounced);
-    };
+    if (Math.round(scrollTop + clientHeight) >= scrollHeight) {
+      repositoriesStore.addPage();
+    }
   }, []);
 
-  const updateInput = (newValue: string) => {
+  const handleScrollDebounced = debounce(handleScroll, 100);
+  const handleInputUpdateDebounced = debounce((newValue: string) => {
     repositoriesStore.updateInput(newValue);
-  };
+  }, 200);
 
-  const updateSelect = (newValue: SortOption) => {
-    repositoriesStore.updateSelect(newValue);
-  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollDebounced);
+    return () => {
+      window.removeEventListener("scroll", handleScrollDebounced);
+    };
+  }, [handleScrollDebounced]);
 
   return (
     <div className="general-outside">
-      <SearchInput value={inputValue} updateValue={updateInput} />
+      <SearchInput
+        value={inputValue}
+        onInputUpdate={handleInputUpdateDebounced}
+      />
       <ResultAndSort
         title={`Result: ${totalCount} repositories`}
         selectedValue={selectedValue}
-        onUpdateSortOption={updateSelect}
+        onUpdateSortOption={repositoriesStore.updateSelect}
       />
       <ItemsList items={repositories} />
     </div>

@@ -212,7 +212,7 @@ const RepositoryPage = observer(() => {
       });
   }, [id, getRepositoryInfo]);
 
-  const onToggleFavorite = useCallback(() => {
+  const handleToggleFavorite = useCallback(() => {
     if (!repository) {
       return;
     }
@@ -228,7 +228,7 @@ const RepositoryPage = observer(() => {
     <div className="general">
       <RepositoryCard
         repository={repository}
-        onToggleFavorite={onToggleFavorite}
+        onToggleFavorite={handleToggleFavorite}
       />
     </div>
   );

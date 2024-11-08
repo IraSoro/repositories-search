@@ -28,7 +28,7 @@ const BackButton = () => {
 const FavoritesPage = observer(() => {
   const [selectedValue, setSelectedValue] = useState(SortOption.Stars);
 
-  const onUpdateSortOption = useCallback((newValue: SortOption) => {
+  const handleChangeSortOption = useCallback((newValue: SortOption) => {
     setSelectedValue(newValue);
     favoritesStore.sort(newValue);
   }, []);
@@ -40,7 +40,7 @@ const FavoritesPage = observer(() => {
         <ResultAndSort
           title={`Favorites: ${favoritesStore.favoritesCount}`}
           selectedValue={selectedValue}
-          onUpdateSortOption={onUpdateSortOption}
+          onUpdateSortOption={handleChangeSortOption}
         />
         <ItemsList
           items={favoritesStore.favorites as RepoInformationEnriched[]}
