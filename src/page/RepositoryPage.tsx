@@ -184,7 +184,6 @@ const RepositoryPage = observer(() => {
     const resp = await fetch(`https://api.github.com/repositories/${id}`, {
       headers: {
         Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN as string}`,
       },
     });
 

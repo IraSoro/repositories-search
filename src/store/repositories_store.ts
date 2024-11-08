@@ -1,9 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { RepoInformation } from "../data/repo_information";
+import {
+  RepoInformationEnriched,
+  RepositoriesResponse,
+} from "../data/repo_information";
 import { SortOption } from "../data/sort_option";
 
 class RepositoriesStore {
-  repositories: RepoInformation[] = [];
+  repositories: RepoInformationEnriched[] = [];
   totalCount = 0;
 
   selectedValue = SortOption.Stars;
@@ -15,49 +18,48 @@ class RepositoriesStore {
     makeAutoObservable(this);
   }
 
-  async fetchGetRepositories() {
-    const headersList = {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN as string}`,
-    };
+  async #fetchGetRepositories() {
+    const options = [
+      `q=${this.inputValue}`,
+      `per_page=${this.repPage}`,
+      `page=${this.page}`,
+      `sort=${this.selectedValue}`,
+    ];
 
-    const url = `https://api.github.com/search/repositories?q=${this.inputValue}&per_page=${this.repPage}&page=${this.page}&sort=${this.selectedValue}`;
+    const resp = await fetch(
+      `https://api.github.com/search/repositories?${options.join("&")}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/vnd.github+json",
+        },
+      }
+    );
 
-    fetch(url, {
-      method: "GET",
-      headers: headersList,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const updatedItems = (data.items as RepoInformation[]).map((item) => ({
-          ...item,
-          isLike: false,
-        }));
+    if (resp.status !== 200) {
+      throw new Error(
+        `Github returned non-200 status code[${
+          resp.status
+        }]: ${await resp.json()}`
+      );
+    }
 
-        runInAction(() => {
-          this.totalCount = data.total_count;
-          this.repositories =
-            this.page === 1
-              ? updatedItems
-              : [...this.repositories, ...updatedItems];
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    const repositoriesResponse = (await resp.json()) as RepositoriesResponse;
+    const repositories = repositoriesResponse.items.map((item) => ({
+      ...item,
+      is_liked: false,
+    }));
+
+    runInAction(() => {
+      this.totalCount = repositoriesResponse.total_count;
+      this.repositories =
+        this.page === 1
+          ? repositories
+          : [...this.repositories, ...repositories];
+    });
   }
 
-  addPage() {
-    this.page = this.page + 1;
-    this.fetchGetRepositories();
-  }
-
-  resetValues() {
+  #resetValues() {
     this.page = 1;
     this.totalCount = 0;
     this.repositories = [];
@@ -65,25 +67,26 @@ class RepositoriesStore {
     this.inputValue = "";
   }
 
+  addPage() {
+    this.page = this.page + 1;
+    this.#fetchGetRepositories();
+  }
+
   updateInput(newValue: string) {
     if (newValue === "") {
-      this.resetValues();
+      this.#resetValues();
       return;
     }
     this.inputValue = newValue;
     this.page = 1;
-    this.fetchGetRepositories();
+    this.#fetchGetRepositories();
   }
 
   updateSelect = (newValue: SortOption) => {
     this.selectedValue = newValue;
     this.page = 1;
-    this.fetchGetRepositories();
+    this.#fetchGetRepositories();
   };
-
-  findRepositoryById(id: number): RepoInformation | undefined {
-    return this.repositories.find((repo) => repo.id === id);
-  }
 }
 
 const repositoriesStore = new RepositoriesStore();

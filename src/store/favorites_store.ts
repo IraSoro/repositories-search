@@ -13,6 +13,18 @@ class FavoritesStore {
     makeAutoObservable(this);
   }
 
+  #addFavorite(item: RepoInformationEnriched) {
+    item.is_liked = true;
+    this.favorites.push(item as RepoInformationEnriched);
+    this.sort(SortOption.Stars);
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+  }
+
+  #removeFavorite(item: RepoInformationEnriched) {
+    this.favorites = this.favorites.filter((favItem) => favItem.id !== item.id);
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+  }
+
   get favoritesCount(): number {
     return this.favorites.length;
   }
@@ -21,26 +33,12 @@ class FavoritesStore {
     return this.favorites.some((favItem) => favItem.id === id);
   }
 
-  addFavorite(item: RepoInformationEnriched) {
-    item.is_liked = true;
-    this.favorites.push(item as RepoInformationEnriched);
-    this.sort(SortOption.Stars);
-    localStorage.setItem("favorites", JSON.stringify(this.favorites));
-  }
-
-  removeFavorite(item: RepoInformationEnriched) {
-    this.favorites = this.favorites.filter(
-      (favItem) => favItem.id !== item.id
-    );
-    localStorage.setItem("favorites", JSON.stringify(this.favorites));
-  }
-
   toggleFavorite(item: RepoInformationEnriched) {
     if (item.is_liked) {
-      this.removeFavorite(item);
+      this.#removeFavorite(item);
       return;
     }
-    this.addFavorite(item);
+    this.#addFavorite(item);
   }
 
   sort(option: SortOption) {

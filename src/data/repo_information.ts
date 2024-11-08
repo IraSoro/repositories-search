@@ -20,6 +20,11 @@ export interface RepoInformation {
   language: string;
 }
 
+export interface RepositoriesResponse {
+  total_count: number;
+  items: RepoInformation[];
+};
+
 export type RepoInformationEnriched = RepoInformation & {
   is_liked: boolean;
 };
